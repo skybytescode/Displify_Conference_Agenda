@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.\\(json|ts|js|html\\)$|^d\")",
+      "Bash(node -e \"require\\(''./src/assets/agenda.json''\\); console.log\\(''Valid JSON''\\);\")",
+      "Bash(npm run:*)",
+      "Bash(npm install:*)",
+      "Bash(node -e \"const m = require\\(''c:/Users/kushn/Displify_Projects/Displify_Conference_Agenda_App/node_modules/@tsparticles/angular''\\); console.log\\(Object.keys\\(m\\)\\)\")",
+      "WebFetch(domain:www.youtube.com)",
+      "WebSearch"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\kushn\\Displify_Projects\\Displify_Conference_Agenda_App\\src"
+    ]
+  }
+}

@@ -1,0 +1,184 @@
+<!-- ===================== FULL-SCREEN MODE ===================== -->
+@if (mode() === 'full') {
+  <div class="agenda-full">
+    <canvas #bgCanvas class="bg-canvas"></canvas>
+    <div class="content-layer">
+
+    <!-- ── Header ── -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-logo">
+          <span class="logo-diz">DIZ</span>
+          <span class="logo-version">4.0</span>
+        </div>
+        <span class="brand-subtitle">CONFERENCE</span>
+      </div>
+      <div class="header-right">
+        @if (isSimulating) {
+          <div class="sim-badge">&#9193; SIMULATION</div>
+        }
+        <div class="clock">{{ formatClock(now()) }}</div>
+        <div class="date">{{ formatDisplayDate(now()) }}</div>
+        @if (agendaData(); as data) {
+          <div class="location">
+            <svg class="pin-icon" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 0C4.13 0 1 3.13 1 7c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5C6.62 9.5 5.5 8.38 5.5 7S6.62 4.5 8 4.5 10.5 5.62 10.5 7 9.38 9.5 8 9.5z" fill="currentColor"/>
+            </svg>
+            {{ data.conference.location }}
+          </div>
+        }
+      </div>
+    </header>
+
+    <!-- ── Current Session ── -->
+    @if (currentSession(); as current) {
+      <section class="section-current">
+        <div class="section-label label-current">
+          <span class="live-dot"></span>
+          CURRENT SESSION
+        </div>
+        <h1 class="current-title">{{ current.title }}</h1>
+        @if (current.description) {
+          <p class="current-description">{{ current.description }}</p>
+        }
+        <div class="session-meta">
+          <span class="meta-time">{{ current.startTime }} &ndash; {{ current.endTime }}</span>
+          @if (current.room) {
+            <span class="meta-separator">|</span>
+            <span class="meta-room">{{ current.room.name }}</span>
+          }
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill"
+               [style.width.%]="current.progress"
+               [style.transition]="progressAnimate() ? (isSimulating ? 'width 60ms linear' : 'width 1s linear') : 'none'"></div>
+        </div>
+      </section>
+    } @else {
+      <section class="section-current">
+        <div class="section-label label-current">
+          <span class="live-dot inactive"></span>
+          NICIO SESIUNE ACTIVĂ
+        </div>
+        <h1 class="current-title muted">Ne pregătim pentru următoarea sesiune</h1>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 0%"></div>
+        </div>
+      </section>
+    }
+
+    <!-- ── Next Session ── -->
+    @if (nextSession(); as next) {
+      <section class="section-next">
+        <div class="section-label label-next">NEXT SESSION</div>
+        <div class="next-body">
+          <div class="next-info">
+            <h2 class="next-title">{{ next.title }}</h2>
+            @if (next.description) {
+              <p class="next-subtitle">{{ next.description }}</p>
+            }
+            <div class="session-meta">
+              <span class="meta-time">{{ next.startTime }} &ndash; {{ next.endTime }}</span>
+              @if (next.room) {
+                <span class="meta-separator">|</span>
+                <span class="meta-room">{{ next.room.shortName }}</span>
+              }
+            </div>
+          </div>
+          <div class="countdown">
+            <span class="countdown-label">STARTS IN</span>
+            <span class="countdown-value">{{ next.minutesUntilStart }}</span>
+            <span class="countdown-unit">MIN</span>
+          </div>
+        </div>
+        <div class="divider-line"></div>
+      </section>
+    }
+
+    <!-- ── Today's Schedule ── -->
+    <section class="section-schedule">
+      <div class="schedule-header">
+        <span class="schedule-title">TODAY</span>
+        @if (agendaData(); as data) {
+          <span class="schedule-date">{{ formatConferenceDate(data.conference.date) }}</span>
+        }
+      </div>
+
+      <div class="schedule-list">
+        @for (slot of visibleSlots(); track slot.startTime) {
+          <div class="slot" [class]="'slot--' + slotStatus(slot.sessions)">
+            <span class="slot-time">{{ slot.startTime }}</span>
+
+            <div class="slot-sessions">
+              @for (session of slot.sessions; track session.id; let i = $index) {
+                <div class="slot-session" [class.slot-session--secondary]="i > 0">
+                  <span class="slot-dot" [class]="'dot--' + session.type"></span>
+                  <span class="slot-name">{{ session.title }}</span>
+                  @if (slot.sessions.length > 1 && session.room) {
+                    <span class="slot-room-tag">{{ session.room.shortName }}</span>
+                  }
+                </div>
+              }
+            </div>
+
+            @if (slotStatus(slot.sessions) === 'ongoing') {
+              <span class="badge badge--ongoing">ONGOING</span>
+            } @else if (slotStatus(slot.sessions) === 'next') {
+              <span class="badge badge--next">NEXT</span>
+            }
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- ── Footer ── -->
+    <footer class="footer">
+      <div class="footer-qr">
+        <div class="footer-text">
+          <p class="qr-label">Scan QR for full agenda</p>
+          <p class="powered-by">Powered by <strong>DISPLIFY</strong></p>
+        </div>
+        @if (qrImageUrl(); as src) {
+          <img class="qr-img" [src]="src" alt="QR code — scan for full agenda" />
+        }
+      </div>
+    </footer>
+
+    </div><!-- /.content-layer -->
+  </div><!-- /.agenda-full -->
+}
+
+<!-- ===================== COMPACT STATUS BAR MODE ===================== -->
+@if (mode() === 'compact') {
+  <div class="agenda-compact">
+
+    @if (currentSession(); as current) {
+      <div class="compact-row compact-row--current">
+        <span class="compact-badge compact-badge--live">LIVE</span>
+        <span class="compact-title">{{ current.title }}</span>
+        <span class="compact-meta">{{ current.startTime }}&ndash;{{ current.endTime }}</span>
+        @if (current.room) {
+          <span class="compact-room">{{ current.room.shortName }}</span>
+        }
+      </div>
+    } @else {
+      <div class="compact-row compact-row--idle">
+        <span class="compact-badge compact-badge--idle">-</span>
+        <span class="compact-title muted">Nicio sesiune activă</span>
+      </div>
+    }
+
+    @if (nextSession(); as next) {
+      <div class="compact-row compact-row--next">
+        <span class="compact-badge compact-badge--next">NEXT</span>
+        <span class="compact-title">{{ next.title }}</span>
+        <span class="compact-meta">{{ next.startTime }}</span>
+        @if (next.room) {
+          <span class="compact-room">{{ next.room.shortName }}</span>
+        }
+        <span class="compact-countdown">in {{ next.minutesUntilStart }}min</span>
+      </div>
+    }
+
+  </div>
+}

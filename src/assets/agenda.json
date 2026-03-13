@@ -1,0 +1,226 @@
+{
+  "conference": {
+    "name": "DIZ 4.0 Conference",
+    "date": "2026-03-26",
+    "location": "Iași, România",
+    "website": "https://digital-innovation.zone/conferinta-diz-2026/#agenda-column",
+    "expoHours": {
+      "open": "09:00",
+      "close": "18:00"
+    }
+  },
+  "rooms": [
+    { "id": "sala-conferinta", "name": "Sală Conferință", "shortName": "Conf." },
+    { "id": "sala-atena",      "name": "Sală Atena",      "shortName": "Atena" },
+    { "id": "sala-foyer",      "name": "Sală Foyer",      "shortName": "Foyer" }
+  ],
+  "sessions": [
+    {
+      "id": "s01",
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "roomId": "sala-conferinta",
+      "type": "registration",
+      "title": "Înregistrare & Welcome Coffee",
+      "description": "Vizitare EXPO.",
+      "speakers": []
+    },
+    {
+      "id": "s02",
+      "startTime": "10:00",
+      "endTime": "10:30",
+      "roomId": "sala-conferinta",
+      "type": "opening",
+      "title": "Deschidere oficială",
+      "description": "Mesaj de bun venit și scurtă sesiune introductivă din partea fondatorilor DIZ.",
+      "speakers": [
+        { "name": "Vasile Asandei",       "affiliation": "Director General, Agenția pentru Dezvoltare Regională Nord-Est" },
+        { "name": "Dan Cașcaval",         "affiliation": "Prof. univ. dr. ing., Universitatea Tehnică 'Gheorghe Asachi' Iași" },
+        { "name": "Simona Caraiman",      "affiliation": "Prorector informatizare și comunicații digitale, Universitatea Tehnică 'Gheorghe Asachi', Iași" },
+        { "name": "Cristina Baghiu",      "affiliation": "Președinte, Digital Innovation Zone ONG" },
+        { "name": "Ionuț Nistor",         "affiliation": "Conf. Dr., Centrul de Transfer Tehnologic MAVIS" },
+        { "name": "Florin Cardașim",      "affiliation": "Managing Partner, Strongbytes" },
+        { "name": "Georgiana Dragomir",   "affiliation": "CEO, Grapefruit" },
+        { "name": "Carmen Mihai",         "affiliation": "Manager, Cluster IMAGO-MOL" }
+      ]
+    },
+    {
+      "id": "s03",
+      "startTime": "10:30",
+      "endTime": "11:00",
+      "roomId": "sala-conferinta",
+      "type": "keynote",
+      "title": "Keynote: Inteligența Artificială. Perspectiva umană.",
+      "description": "AI ca motor al transformării sustenabile și orientate spre oameni. Cum tehnologiile inteligente schimbă economia, serviciile publice și viața de zi cu zi – dincolo de hype, cu impact real.",
+      "speakers": [
+        { "name": "Alexandra Avdeenko", "affiliation": "Economist, Banca Mondială" }
+      ]
+    },
+    {
+      "id": "s04",
+      "startTime": "11:00",
+      "endTime": "11:45",
+      "roomId": "sala-conferinta",
+      "type": "panel",
+      "title": "Panel 1: De la politică la practică",
+      "description": "Cum transformă inteligența artificială serviciile publice și mediul de afaceri.",
+      "speakers": [
+        { "name": "Nelli Blinova",          "affiliation": "Responsabil Parteneriate Internaționale în domeniul IA, Ministerul Transformării Digitale Ucraina" },
+        { "name": "Nicoleta Colomeeț",      "affiliation": "Director, Agenția de Guvernare Electronică Republica Moldova" },
+        { "name": "Cătălin Răsturnoiu",     "affiliation": "Head of Presales & ICT Delivery, Orange Business" },
+        { "name": "Elena Cosma",            "affiliation": "Director, Centrul Național de Coordonare în domeniul Securității Cibernetice (NCC-RO)" },
+        { "name": "Larisa Mezinu Bălan",    "affiliation": "Vicepreședinte, Casa Națională de Asigurări de Sănătate" },
+        { "name": "Alina-Roxana Gîrbea",    "affiliation": "Secretar de stat, Ministerul Investițiilor și Proiectelor Europene" },
+        { "name": "Valeria Popescu",        "affiliation": "Coordonator Senior Securitate Cibernetică, Directoratul Național de Securitate Cibernetică (DNSC)" }
+      ]
+    },
+    {
+      "id": "s05",
+      "startTime": "12:00",
+      "endTime": "12:45",
+      "roomId": "sala-conferinta",
+      "type": "panel",
+      "title": "Panel 2: Antreprenoriatul bazat pe inteligența artificială",
+      "description": "Construirea următoarei generații de companii high-tech.",
+      "speakers": [
+        { "name": "Mihnea Crăciun",         "affiliation": "Managing Director | PhD, MBA, Endeavor România" },
+        { "name": "Vlad Gliga",             "affiliation": "CEO Rubik Hub și Președinte al consiliului de administrație ROStartup Ecosystem, Rubik Hub" },
+        { "name": "Elena-Anca Paraschiv",   "affiliation": "Cercetător științific, Institutul Național de Cercetare – Dezvoltare în Informatică – ICI București" },
+        { "name": "Marius Ghenea",          "affiliation": "Managing Partner, Catalyst România" },
+        { "name": "Simona Caraiman",        "affiliation": "Prorector informatizare și comunicații digitale, Universitatea Tehnică 'Gheorghe Asachi', Iași" },
+        { "name": "Matei Dumitrescu",       "affiliation": "CEO, Graal Soft" },
+        { "name": "Tiberiu Baraboi",        "affiliation": "CEO, Expertware" }
+      ]
+    },
+    {
+      "id": "s06",
+      "startTime": "12:45",
+      "endTime": "13:15",
+      "roomId": "sala-conferinta",
+      "type": "talk",
+      "title": "NEXT on EDIH 2.0",
+      "description": "",
+      "speakers": [
+        { "name": "Mihaela Lafont",              "affiliation": "EU Official, DG CNECT, AI Office, Comisia Europeană" },
+        { "name": "Liviana-Michelle Strâmbeanu", "affiliation": "Asistent de program, Direcția Generală Politică Regională și Urbană (DG REGIO), unitatea pentru Croația și România" },
+        { "name": "Alexandru Bobe",              "affiliation": "Coordonator, CiTyInnoHub" },
+        { "name": "Cristina Baghiu",             "affiliation": "Președinte, Digital Innovation Zone ONG" }
+      ]
+    },
+    {
+      "id": "s07",
+      "startTime": "13:15",
+      "endTime": "14:30",
+      "roomId": "sala-foyer",
+      "type": "break",
+      "title": "Pauză de masă & Networking",
+      "description": "",
+      "speakers": []
+    },
+    {
+      "id": "s08",
+      "startTime": "14:30",
+      "endTime": "16:00",
+      "roomId": "sala-conferinta",
+      "type": "track",
+      "title": "Private Sector Track",
+      "description": "Tehnologie pentru creșterea afacerilor.",
+      "speakers": [
+        { "name": "Constanța Ghițu",          "affiliation": "Data Scientist, Strongbytes" },
+        { "name": "Lucian Sandu",              "affiliation": "Șef Birou Gestionare RIS3 – Direcția Comunicare, Inovare și Cooperare Externă, Agenția pentru Dezvoltare Regională Nord-Est" },
+        { "name": "Florin Cardașim",           "affiliation": "Managing Partner, Strongbytes" },
+        { "name": "Ioana Călărașu",            "affiliation": "Șef Serviciu Programare, Evaluare, Contractare PoCIDIF și PNRR, Autoritatea pentru Digitalizarea României" },
+        { "name": "Ciprian Comșa",             "affiliation": "Prorector, Universitatea Tehnică 'Gheorghe Asachi' Iași" },
+        { "name": "Andrei Munteanu",           "affiliation": "Co-fondator & CEO, Cowork Timișoara | Co-fondator & Director General Programe, Vest Ventures" },
+        { "name": "Georgiana Andrei-Muntean",  "affiliation": "Director Comercial, Rețeaua Privată de Sănătate REGINA MARIA" },
+        { "name": "Georgiana Dragomir",        "affiliation": "CEO, Grapefruit" }
+      ]
+    },
+    {
+      "id": "s09",
+      "startTime": "14:30",
+      "endTime": "16:00",
+      "roomId": "sala-atena",
+      "type": "track",
+      "title": "Public Sector Track",
+      "description": "AI for Smarter Governance.",
+      "speakers": [
+        { "name": "Lucian Viziteu",          "affiliation": "Primar, Primăria Municipiului Bacău" },
+        { "name": "Tudor Colț",              "affiliation": "Channel Account Manager, Fsas Technologies (Fujitsu)" },
+        { "name": "Raluca Negulescu-Balaci", "affiliation": "Director executiv, UiPath Foundation" },
+        { "name": "Cristina Bodron",         "affiliation": "Șef Birou Regional de Informare, Agenția pentru Dezvoltare Regională Nord-Est" },
+        { "name": "Carmen Mihai",            "affiliation": "Manager, Cluster IMAGO-MOL" },
+        { "name": "Mara Toma",              "affiliation": "Head of Business Growth, Digital Innovation Zone" },
+        { "name": "Stelian Câmpianu",        "affiliation": "Director Executiv, ETA2U" }
+      ]
+    },
+    {
+      "id": "s10",
+      "startTime": "16:15",
+      "endTime": "18:00",
+      "roomId": "sala-atena",
+      "type": "invite-only",
+      "title": "Întâlnirea națională a EDIH-urilor din România",
+      "description": "Reprezentanți AM și PCIDIF. Acces doar pe bază de invitație.",
+      "speakers": []
+    },
+    {
+      "id": "s11",
+      "startTime": "16:15",
+      "endTime": "18:00",
+      "roomId": "sala-conferinta",
+      "type": "pitching",
+      "title": "Pitching \"AI in Action\"",
+      "description": "",
+      "speakers": [],
+      "subSessions": [
+        {
+          "id": "s11a",
+          "startTime": "16:15",
+          "endTime": "16:30",
+          "type": "keynote",
+          "title": "Keynote Speech: AI in Action",
+          "speakers": [
+            { "name": "Jakow Smirin", "affiliation": "Startplatz AI Hub, Germania" }
+          ]
+        },
+        {
+          "id": "s11b",
+          "startTime": "16:30",
+          "endTime": "18:00",
+          "type": "pitching",
+          "title": "Sesiune de pitching",
+          "speakers": [],
+          "jury": [
+            { "name": "Marius Ghenea",        "affiliation": "Catalyst România" },
+            { "name": "Mihnea Crăciun",       "affiliation": "ENDEAVOR România" },
+            { "name": "Andrei Munteanu",      "affiliation": "Vest Ventures" },
+            { "name": "Matei Dumitrescu",     "affiliation": "Fil Rouge Capital" },
+            { "name": "Simona Ramanauskaite", "affiliation": "Vilnius Gediminas Technical University" },
+            { "name": "Darja Bubnova",        "affiliation": "RTU Riga Business School" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s12",
+      "startTime": "16:15",
+      "endTime": "18:00",
+      "roomId": "sala-foyer",
+      "type": "matchmaking",
+      "title": "Matchmaking",
+      "description": "Sesiune programată individual prin platforma Cardneto. Susținută prin programul SustainX. Programează-ți întâlniri ltol în zona special amenajată din Sala Foyer.",
+      "speakers": []
+    },
+    {
+      "id": "s13",
+      "startTime": "18:00",
+      "endTime": "21:00",
+      "roomId": "sala-foyer",
+      "type": "networking",
+      "title": "Networking Dinner",
+      "description": "",
+      "speakers": []
+    }
+  ]
+}
