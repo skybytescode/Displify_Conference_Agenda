@@ -8,6 +8,16 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 http://localhost:4200/agenda?simStart=08:55&simEnd=21:00&simDuration=210
 ```
 
+## URL Parameters
+
+| Parameter      | Description                                                  | Example          |
+|----------------|--------------------------------------------------------------|------------------|
+| `simStart`     | Simulation start time (HH:mm)                               | `simStart=08:55` |
+| `simEnd`       | Simulation end time (HH:mm)                                 | `simEnd=21:00`   |
+| `simDuration`  | Simulation duration in seconds (real-time → sim-time ratio) | `simDuration=210`|
+| `mode`         | Display mode: `full` (default) or `compact`                 | `mode=compact`   |
+| `nextSlots`    | Limit the number of future events shown in the schedule list | `nextSlots=5`    |
+
 ## Development server
 
 To start a local development server, run:

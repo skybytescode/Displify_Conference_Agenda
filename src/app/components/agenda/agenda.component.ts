@@ -107,6 +107,14 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
     { initialValue: 'full' as 'full' | 'compact' }
   );
 
+  // ── Future-slots limit — ?nextSlots=N (omit for unlimited) ────────────────
+  protected nextSlotsLimit = toSignal(
+    this.route.queryParams.pipe(
+      map(p => p['nextSlots'] ? Math.max(1, parseInt(p['nextSlots'], 10)) : null)
+    ),
+    { initialValue: null as number | null }
+  );
+
   // ── Agenda data ────────────────────────────────────────────────────────────
   protected agendaData     = toSignal(this.agendaService.agendaData$);
   protected currentSession = toSignal(this.agendaService.currentSession$);
@@ -145,17 +153,14 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  protected visibleSlots = computed(() =>
-    this.timeSlots().filter(slot =>
-      slot.sessions.some(s => s.status !== 'done') || this.isRecentlyDone(slot)
-    )
-  );
-
-  private isRecentlyDone(slot: TimeSlot): boolean {
-    const done  = this.timeSlots().filter(s => s.sessions.every(x => x.status === 'done'));
-    const last2 = done.slice(-2);
-    return last2.some(d => d.startTime === slot.startTime);
-  }
+  protected visibleSlots = computed(() => {
+    // Only show slots that are not fully done (no past events)
+    const upcoming = this.timeSlots().filter(slot =>
+      slot.sessions.some(s => s.status !== 'done')
+    );
+    const limit = this.nextSlotsLimit();
+    return limit !== null ? upcoming.slice(0, limit) : upcoming;
+  });
 
   // ── Bokeh canvas ───────────────────────────────────────────────────────────
   private ctx!:        CanvasRenderingContext2D;
