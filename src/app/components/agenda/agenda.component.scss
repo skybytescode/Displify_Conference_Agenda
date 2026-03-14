@@ -403,6 +403,14 @@
   flex-shrink: 0;
 }
 
+.slot-badge-area {
+  flex-shrink: 0;
+  width: clamp(5.5rem, 8.5vw, 11rem);   // fixed width — all badges start at the same X
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .badge {
   flex-shrink: 0;
   font-size: clamp(0.94rem, 1.36vw, 1.7rem);

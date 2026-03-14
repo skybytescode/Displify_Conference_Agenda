@@ -114,11 +114,13 @@
               }
             </div>
 
-            @if (slotStatus(slot.sessions) === 'ongoing') {
-              <span class="badge badge--ongoing">ONGOING</span>
-            } @else if (slotStatus(slot.sessions) === 'next') {
-              <span class="badge badge--next">NEXT</span>
-            }
+            <div class="slot-badge-area">
+              @if (slotStatus(slot.sessions) === 'ongoing') {
+                <span class="badge badge--ongoing">ONGOING</span>
+              } @else if (slotStatus(slot.sessions) === 'next') {
+                <span class="badge badge--next">NEXT</span>
+              }
+            </div>
           </div>
         }
       </div>
