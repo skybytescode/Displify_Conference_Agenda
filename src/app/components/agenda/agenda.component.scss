@@ -463,9 +463,9 @@
 .brand-logo-img {
   height: clamp(18px, 2.2vw, 36px);
   width: auto;
-  mix-blend-mode: screen;           // removes white background on dark bg
-  filter: saturate(1.2) brightness(0.95);
   vertical-align: middle;
+  // Strip original colors → recolor to app cyan (#00d4ff)
+  filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(163deg) brightness(1.05);
 }
 
 .qr-img {
