@@ -404,21 +404,18 @@
 }
 
 .slot-speakers {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.3em;
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 0.5em;
+  row-gap: 0.2em;
+  align-items: baseline;
+  justify-content: end;
   flex-shrink: 0;
-  max-width: clamp(8rem, 18vw, 24rem);
+  max-width: clamp(8rem, 22vw, 28rem);
 }
 
 .slot-speaker {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: flex-end;
-  gap: 0.4em;
-  min-width: 0;
+  display: contents; // name and role become direct grid children — columns align across speakers
 }
 
 .slot-speaker-name {
@@ -428,6 +425,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: right;
 }
 
 .slot-speaker-role {
