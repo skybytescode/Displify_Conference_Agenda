@@ -25,8 +25,8 @@ export class ClockService {
       const { startMs, speedFactor } = sim;
       const wallStart = Date.now();
 
-      // Tick every 50 ms real-time — fast enough to drive smooth sim updates
-      this.now$ = interval(50).pipe(
+      // Tick every 16 ms real-time (~60 fps) for smooth bar/percentage sync
+      this.now$ = interval(16).pipe(
         startWith(0),
         map(() => new Date(startMs + (Date.now() - wallStart) * speedFactor)),
         shareReplay(1)

@@ -215,10 +215,10 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
     const vy      = (tier.vMin + Math.random() * (tier.vMax - tier.vMin)) * s;
 
     const rnd = Math.random();
-    const ci  = rnd < 0.72 ? Math.floor(Math.random() * 4)
-              : rnd < 0.82 ? 4
-              : rnd < 0.91 ? 5
-              :               6;
+    const ci  = rnd < 0.42 ? Math.floor(Math.random() * 4)  // 42% warm amber/orange
+              : rnd < 0.62 ? 4                               // 20% cool blue-white
+              : rnd < 0.80 ? 5                               // 18% cyan
+              :               6;                             // 20% soft purple
 
     // Per-tier dynamic ranges
     const scaleAmps  = [0.45, 0.22, 0.14, 0.09];

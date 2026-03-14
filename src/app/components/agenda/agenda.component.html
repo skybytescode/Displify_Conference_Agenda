@@ -58,22 +58,26 @@
             <div class="current-right">
               <div class="credits-viewport">
                 <div class="credits-track" [style.animation-duration]="creditsDuration(current.speakers)">
-                  @for (sp of current.speakers; track sp.name) {
-                    <div class="credit-item">
-                      <span class="credit-name">{{ sp.name }}</span>
-                      @if (sp.affiliation) {
-                        <span class="credit-role">{{ sp.affiliation }}</span>
-                      }
-                    </div>
-                  }
-                  @for (sp of current.speakers; track sp.name + '_2') {
-                    <div class="credit-item">
-                      <span class="credit-name">{{ sp.name }}</span>
-                      @if (sp.affiliation) {
-                        <span class="credit-role">{{ sp.affiliation }}</span>
-                      }
-                    </div>
-                  }
+                  <div class="credits-half">
+                    @for (sp of current.speakers; track sp.name) {
+                      <div class="credit-item">
+                        <span class="credit-name">{{ sp.name }}</span>
+                        @if (sp.affiliation) {
+                          <span class="credit-role">{{ sp.affiliation }}</span>
+                        }
+                      </div>
+                    }
+                  </div>
+                  <div class="credits-half">
+                    @for (sp of current.speakers; track sp.name + '_2') {
+                      <div class="credit-item">
+                        <span class="credit-name">{{ sp.name }}</span>
+                        @if (sp.affiliation) {
+                          <span class="credit-role">{{ sp.affiliation }}</span>
+                        }
+                      </div>
+                    }
+                  </div>
                 </div>
               </div>
             </div>
@@ -85,7 +89,7 @@
           <div class="progress-bar">
             <div class="progress-fill"
                  [style.width.%]="current.progress"
-                 [style.transition]="progressAnimate() ? (isSimulating ? 'width 60ms linear' : 'width 1s linear') : 'none'"></div>
+                 [style.transition]="progressAnimate() ? (isSimulating ? 'none' : 'width 1s linear') : 'none'"></div>
           </div>
           <div class="progress-pct">
             <span class="pct-label">COMPLETE</span>
@@ -173,10 +177,10 @@
     <footer class="footer">
       <div class="footer-qr">
         <div class="footer-text">
-          <p class="powered-by">
-            Powered by
+          <div class="powered-by">
             <img class="brand-logo-img" src="assets/displify-logo.png" alt="Displify" />
-          </p>
+            <span class="powered-by-label">Powered by</span>
+          </div>
         </div>
         @if (qrImageUrl(); as src) {
           <img class="qr-img" [src]="src" alt="QR code — scan for full agenda" />
