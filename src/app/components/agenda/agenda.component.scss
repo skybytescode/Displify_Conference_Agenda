@@ -403,37 +403,6 @@
   flex-shrink: 0;
 }
 
-.slot-speakers {
-  display: table;
-  border-collapse: separate;
-  border-spacing: 0 0.15em;
-  flex-shrink: 0;
-  max-width: clamp(8rem, 22vw, 28rem);
-}
-
-.slot-speaker {
-  display: table-row;
-}
-
-.slot-speaker-name {
-  display: table-cell;
-  font-size: clamp(0.75rem, 1.25vw, 1.55rem);
-  font-weight: 600;
-  color: var(--text-primary);
-  white-space: nowrap;
-  padding-right: 0.55em;
-  vertical-align: baseline;
-}
-
-.slot-speaker-role {
-  display: table-cell;
-  font-size: clamp(0.6rem, 0.95vw, 1.2rem);
-  font-weight: 400;
-  color: var(--text-muted);
-  white-space: nowrap;
-  vertical-align: baseline;
-}
-
 .badge {
   flex-shrink: 0;
   font-size: clamp(0.94rem, 1.36vw, 1.7rem);

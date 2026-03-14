@@ -382,10 +382,6 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
       .toUpperCase();
   }
 
-  protected slotSpeakers(sessions: EnrichedSession[]): { name: string; affiliation: string }[] {
-    return sessions.flatMap(s => s.speakers.map(sp => ({ name: sp.name, affiliation: sp.affiliation })));
-  }
-
   protected slotStatus(sessions: EnrichedSession[]): SessionStatus {
     if (sessions.some(s => s.status === 'ongoing')) return 'ongoing';
     if (sessions.some(s => s.status === 'next'))    return 'next';
