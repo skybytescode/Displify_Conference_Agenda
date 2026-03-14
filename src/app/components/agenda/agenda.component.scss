@@ -454,10 +454,20 @@
 
 .powered-by {
   font-size: clamp(0.6rem, 0.9vw, 1.15rem);
-  color: var(--amber);
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  animation: poweredByColor 6s linear infinite;
+}
+
+@keyframes poweredByColor {
+  0%    { color: #a855f7; }   // purple
+  16%   { color: #3b82f6; }   // blue
+  33%   { color: #6366f1; }   // indigo
+  50%   { color: #ef4444; }   // red
+  66%   { color: #ffffff; }   // white
+  83%   { color: #eab308; }   // yellow
+  100%  { color: #a855f7; }   // back to purple
 }
 
 .brand-logo-img {
