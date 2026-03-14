@@ -334,10 +334,10 @@
 }
 
 .slot-time {
-  font-size: clamp(0.8rem, 1.3vw, 1.65rem);
+  font-size: clamp(1.36rem, 2.21vw, 2.8rem);
   font-weight: 600;
   color: var(--text-muted);
-  min-width: clamp(3rem, 4.5vw, 6rem);
+  min-width: clamp(5rem, 7.65vw, 10.2rem);
   padding-top: 0.1em;
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
@@ -365,8 +365,8 @@
 }
 
 .slot-dot {
-  width:  clamp(7px, 0.5vw, 11px);
-  height: clamp(7px, 0.5vw, 11px);
+  width:  clamp(12px, 0.85vw, 19px);
+  height: clamp(12px, 0.85vw, 19px);
   border-radius: 50%;
   flex-shrink: 0;
   background: var(--text-muted);
@@ -383,7 +383,7 @@
 }
 
 .slot-name {
-  font-size: clamp(0.85rem, 1.5vw, 1.9rem);
+  font-size: clamp(1.45rem, 2.55vw, 3.23rem);
   font-weight: 500;
   color: var(--text-primary);
   white-space: nowrap;
@@ -393,7 +393,7 @@
 }
 
 .slot-room-tag {
-  font-size: clamp(0.6rem, 0.85vw, 1.1rem);
+  font-size: clamp(1.02rem, 1.45vw, 1.87rem);
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   color: var(--text-muted);
@@ -405,7 +405,7 @@
 
 .badge {
   flex-shrink: 0;
-  font-size: clamp(0.55rem, 0.8vw, 1rem);
+  font-size: clamp(0.94rem, 1.36vw, 1.7rem);
   font-weight: 700;
   letter-spacing: 0.09em;
   padding: clamp(0.2rem, 0.3vw, 0.45rem) clamp(0.5rem, 0.8vw, 1.1rem);
