@@ -170,16 +170,16 @@
 .current-right {
   width: 45%;
   flex-shrink: 0;
-  display: flex;
-  align-items: stretch;
+  position: relative;       // stacking context for absolutely-positioned viewport
   border-left: 1px solid var(--border-subtle);
   padding-left: clamp(1rem, 2vw, 3rem);
-  overflow: hidden;        // hard clip — credits never escape this panel
+  // no overflow:hidden here — the absolute child handles clipping
+  // no natural height contribution — section height set by .current-left only
 }
 
 .credits-viewport {
-  width: 100%;
-  height: 100%;            // fill the section height exactly
+  position: absolute;       // out of normal flow — doesn't expand the section
+  inset: 0;                 // fills .current-right exactly (section height)
   overflow: hidden;
   mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
