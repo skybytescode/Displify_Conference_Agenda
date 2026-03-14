@@ -87,7 +87,11 @@
                  [style.width.%]="current.progress"
                  [style.transition]="progressAnimate() ? (isSimulating ? 'width 60ms linear' : 'width 1s linear') : 'none'"></div>
           </div>
-          <span class="progress-pct">{{ current.progress.toFixed(0) }}%</span>
+          <div class="progress-pct">
+            <span class="pct-label">COMPLETE</span>
+            <span class="pct-value">{{ current.progress.toFixed(0) }}</span>
+            <span class="pct-unit">%</span>
+          </div>
         </div>
 
       </section>
