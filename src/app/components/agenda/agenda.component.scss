@@ -50,7 +50,7 @@
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   padding: clamp(1.25rem, 2vw, 2.5rem) clamp(1.75rem, 3vw, 4rem);
   flex-shrink: 0;
   border-bottom: 1px solid var(--border-subtle);
