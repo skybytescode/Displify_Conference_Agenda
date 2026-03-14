@@ -97,13 +97,6 @@
 
     <!-- ── Today's Schedule ── -->
     <section class="section-schedule">
-      <div class="schedule-header">
-        <span class="schedule-title">TODAY</span>
-        @if (agendaData(); as data) {
-          <span class="schedule-date">{{ formatConferenceDate(data.conference.date) }}</span>
-        }
-      </div>
-
       <div class="schedule-list">
         @for (slot of visibleSlots(); track slot.startTime) {
           <div class="slot" [class]="'slot--' + slotStatus(slot.sessions)">
