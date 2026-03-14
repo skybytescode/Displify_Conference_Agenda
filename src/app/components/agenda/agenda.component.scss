@@ -78,7 +78,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: dizColor 5s linear infinite;
+  animation: dizColor 6s ease-in-out infinite alternate;
 }
 
 @keyframes dizColor {
