@@ -403,6 +403,25 @@
   flex-shrink: 0;
 }
 
+.slot-speakers {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.1em;
+  flex-shrink: 0;
+  max-width: clamp(8rem, 18vw, 24rem);
+}
+
+.slot-speaker-name {
+  font-size: clamp(0.75rem, 1.25vw, 1.55rem);
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+
 .badge {
   flex-shrink: 0;
   font-size: clamp(0.94rem, 1.36vw, 1.7rem);

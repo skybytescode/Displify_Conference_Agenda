@@ -114,6 +114,17 @@
               }
             </div>
 
+            @if (slotStatus(slot.sessions) === 'ongoing' || slotStatus(slot.sessions) === 'next') {
+              @let speakers = slotSpeakers(slot.sessions);
+              @if (speakers.length > 0) {
+                <div class="slot-speakers">
+                  @for (name of speakers; track name) {
+                    <span class="slot-speaker-name">{{ name }}</span>
+                  }
+                </div>
+              }
+            }
+
             @if (slotStatus(slot.sessions) === 'ongoing') {
               <span class="badge badge--ongoing">ONGOING</span>
             } @else if (slotStatus(slot.sessions) === 'next') {
