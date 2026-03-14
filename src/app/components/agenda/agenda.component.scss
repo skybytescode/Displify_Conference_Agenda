@@ -10,8 +10,8 @@
 .session-meta {
   display: flex;
   align-items: center;
-  gap: clamp(0.5rem, 0.8vw, 1rem);
-  font-size: clamp(0.9rem, 1.4vw, 1.75rem);
+  gap: clamp(0.5rem, 0.8vw, 2rem);
+  font-size: clamp(0.9rem, 1.4vw, 3.5rem);
   color: var(--text-secondary);
 
   .meta-time      { display: flex; align-items: center; gap: 0.3em; }
@@ -51,7 +51,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: clamp(1.25rem, 2vw, 2.5rem) clamp(1.75rem, 3vw, 4rem);
+  padding: clamp(1.25rem, 2vw, 5rem) clamp(1.75rem, 3vw, 8rem);
   flex-shrink: 0;
   border-bottom: 1px solid var(--border-subtle);
 }
@@ -70,7 +70,7 @@
 }
 
 .logo-diz {
-  font-size: clamp(2rem, 4vw, 5rem);
+  font-size: clamp(2rem, 4vw, 10rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   background: linear-gradient(90deg, #a855f7, #3b82f6, #00d4ff, #22c55e, #eab308, #ef4444, #a855f7);
@@ -87,13 +87,13 @@
 }
 
 .logo-version {
-  font-size: clamp(1rem, 2vw, 2.5rem);
+  font-size: clamp(1rem, 2vw, 5rem);
   font-weight: 600;
   color: var(--text-secondary);
 }
 
 .brand-subtitle {
-  font-size: clamp(0.65rem, 1vw, 1.25rem);
+  font-size: clamp(0.65rem, 1vw, 2.5rem);
   font-weight: 500;
   letter-spacing: 0.18em;
   color: var(--text-muted);
@@ -108,7 +108,7 @@
 }
 
 .sim-badge {
-  font-size: clamp(0.55rem, 0.85vw, 1.05rem);
+  font-size: clamp(0.55rem, 0.85vw, 2.1rem);
   font-weight: 700;
   letter-spacing: 0.12em;
   color: var(--amber);
@@ -120,7 +120,7 @@
 }
 
 .clock {
-  font-size: clamp(2rem, 4vw, 5rem);
+  font-size: clamp(2rem, 4vw, 10rem);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1;
@@ -128,7 +128,7 @@
 }
 
 .date {
-  font-size: clamp(0.75rem, 1.2vw, 1.5rem);
+  font-size: clamp(0.75rem, 1.2vw, 3rem);
   font-weight: 500;
   color: var(--text-secondary);
   letter-spacing: 0.06em;
@@ -139,7 +139,7 @@
   align-items: center;
   justify-content: flex-end;
   gap: 0.35rem;
-  font-size: clamp(0.7rem, 1.1vw, 1.35rem);
+  font-size: clamp(0.7rem, 1.1vw, 2.7rem);
   color: var(--text-muted);
 
   .pin-icon {
@@ -152,17 +152,17 @@
 
 // ── Current Session ───────────────────────────────────────────────────────────
 .section-current {
-  padding: clamp(1.25rem, 2vw, 2.5rem) clamp(1.75rem, 3vw, 4rem);
+  padding: clamp(1.25rem, 2vw, 5rem) clamp(1.75rem, 3vw, 8rem);
   flex-shrink: 0;
   border-bottom: 1px solid var(--border-subtle);
   display: flex;
   flex-direction: column;
-  gap: clamp(0.75rem, 1.2vw, 1.5rem);
+  gap: clamp(0.75rem, 1.2vw, 3rem);
 }
 
 .current-body {
   display: flex;
-  gap: clamp(1rem, 2vw, 3rem);
+  gap: clamp(1rem, 2vw, 6rem);
   align-items: stretch;
 }
 
@@ -178,7 +178,7 @@
   flex-shrink: 0;
   position: relative;
   border-left: 1px solid var(--border-subtle);
-  padding-left: clamp(1rem, 2vw, 3rem);
+  padding-left: clamp(1rem, 2vw, 6rem);
 }
 
 .credits-viewport {
@@ -192,7 +192,7 @@
 .current-progress {
   display: flex;
   align-items: center;
-  gap: clamp(0.5rem, 0.8vw, 1.2rem);
+  gap: clamp(0.5rem, 0.8vw, 2.4rem);
 
   .progress-bar { flex: 1; margin-top: 0; }
 }
@@ -205,15 +205,15 @@
   justify-content: center;
   background: rgba(0, 212, 255, 0.1);
   border: 1px solid rgba(0, 212, 255, 0.3);
-  border-radius: clamp(10px, 1vw, 18px);
-  padding: clamp(0.4rem, 0.7vw, 1rem) clamp(0.8rem, 1.4vw, 2rem);
-  min-width: clamp(70px, 7vw, 120px);
+  border-radius: clamp(10px, 1vw, 36px);
+  padding: clamp(0.4rem, 0.7vw, 2rem) clamp(0.8rem, 1.4vw, 4rem);
+  min-width: clamp(70px, 7vw, 240px);
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
 
 .pct-label {
-  font-size: clamp(0.45rem, 0.75vw, 0.95rem);
+  font-size: clamp(0.45rem, 0.75vw, 1.9rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--cyan);
@@ -227,14 +227,14 @@
 }
 
 .pct-value {
-  font-size: clamp(1.5rem, 3vw, 4rem);
+  font-size: clamp(1.5rem, 3vw, 8rem);
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.04em;
 }
 
 .pct-unit {
-  font-size: clamp(1.12rem, 1.96vw, 2.52rem);
+  font-size: clamp(1.12rem, 1.96vw, 5rem);
   font-weight: 700;
   color: #ffffff;
 }
@@ -254,28 +254,28 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: clamp(0.35rem, 0.6vw, 0.9rem) 0;
+  padding: clamp(0.35rem, 0.6vw, 1.8rem) 0;
 }
 
 .credit-name {
-  font-size: clamp(0.9rem, 1.5vw, 1.9rem);
+  font-size: clamp(0.9rem, 1.5vw, 3.8rem);
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
 }
 
 .credit-role {
-  font-size: clamp(0.65rem, 1.05vw, 1.35rem);
+  font-size: clamp(0.65rem, 1.05vw, 2.7rem);
   font-weight: 400;
   color: var(--text-muted);
   white-space: nowrap;
 }
 
 .section-label {
-  font-size: clamp(0.65rem, 1vw, 1.25rem);
+  font-size: clamp(0.65rem, 1vw, 2.5rem);
   font-weight: 700;
   letter-spacing: 0.14em;
-  margin-bottom: clamp(0.5rem, 0.8vw, 1rem);
+  margin-bottom: clamp(0.5rem, 0.8vw, 2rem);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -285,8 +285,8 @@
 .label-next    { color: var(--purple); }
 
 .live-dot {
-  width:  clamp(10px, 0.7vw, 16px);
-  height: clamp(10px, 0.7vw, 16px);
+  width:  clamp(10px, 0.7vw, 32px);
+  height: clamp(10px, 0.7vw, 32px);
   border-radius: 50%;
   background: var(--green);
   box-shadow: 0 0 8px var(--green);
@@ -306,7 +306,7 @@
 }
 
 .current-title {
-  font-size: clamp(2rem, 5vw, 6.5rem);
+  font-size: clamp(2rem, 5vw, 13rem);
   font-weight: 700;
   line-height: 1.08;
   letter-spacing: -0.025em;
@@ -317,7 +317,7 @@
 }
 
 .current-description {
-  font-size: clamp(0.9rem, 1.5vw, 1.9rem);
+  font-size: clamp(0.9rem, 1.5vw, 3.8rem);
   color: var(--text-secondary);
   margin: 0 0 0.5em;
   line-height: 1.4;
@@ -325,7 +325,7 @@
 }
 
 .progress-bar {
-  height: clamp(5px, 0.45vw, 10px);
+  height: clamp(5px, 0.45vw, 20px);
   background: var(--border-subtle);
   border-radius: 99px;
   overflow: hidden;
@@ -340,7 +340,7 @@
 
 // ── Next Session ──────────────────────────────────────────────────────────────
 .section-next {
-  padding: clamp(1rem, 1.6vw, 2rem) clamp(1.75rem, 3vw, 4rem);
+  padding: clamp(1rem, 1.6vw, 4rem) clamp(1.75rem, 3vw, 8rem);
   flex-shrink: 0;
 }
 
@@ -348,13 +348,13 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: clamp(1rem, 2vw, 3rem);
+  gap: clamp(1rem, 2vw, 6rem);
 }
 
 .next-info { flex: 1; min-width: 0; }
 
 .next-title {
-  font-size: clamp(1.4rem, 3vw, 4rem);
+  font-size: clamp(1.4rem, 3vw, 8rem);
   font-weight: 700;
   line-height: 1.12;
   letter-spacing: -0.015em;
@@ -363,7 +363,7 @@
 }
 
 .next-subtitle {
-  font-size: clamp(0.85rem, 1.4vw, 1.75rem);
+  font-size: clamp(0.85rem, 1.4vw, 3.5rem);
   color: var(--text-secondary);
   margin: 0 0 0.4em;
   line-height: 1.35;
@@ -377,21 +377,21 @@
   justify-content: center;
   background: rgba(139, 92, 246, 0.15);
   border: 1px solid rgba(139, 92, 246, 0.35);
-  border-radius: clamp(10px, 1vw, 18px);
-  padding: clamp(0.6rem, 1vw, 1.5rem) clamp(1rem, 1.8vw, 2.5rem);
-  min-width: clamp(80px, 8vw, 140px);
+  border-radius: clamp(10px, 1vw, 36px);
+  padding: clamp(0.6rem, 1vw, 3rem) clamp(1rem, 1.8vw, 5rem);
+  min-width: clamp(80px, 8vw, 280px);
   text-align: center;
 }
 
 .countdown-label {
-  font-size: clamp(0.5rem, 0.8vw, 1rem);
+  font-size: clamp(0.5rem, 0.8vw, 2rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--purple);
 }
 
 .countdown-value {
-  font-size: clamp(1.75rem, 3.5vw, 4.5rem);
+  font-size: clamp(1.75rem, 3.5vw, 9rem);
   font-weight: 700;
   line-height: 1;
   color: var(--text-primary);
@@ -399,7 +399,7 @@
 }
 
 .countdown-unit {
-  font-size: clamp(0.5rem, 0.8vw, 1rem);
+  font-size: clamp(0.5rem, 0.8vw, 2rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--text-muted);
@@ -409,33 +409,33 @@
   height: 1px;
   background: var(--gradient-accent);
   opacity: 0.35;
-  margin-top: clamp(0.75rem, 1.2vw, 1.5rem);
+  margin-top: clamp(0.75rem, 1.2vw, 3rem);
 }
 
 // ── Today's Schedule ──────────────────────────────────────────────────────────
 .section-schedule {
   flex: 1 1 0;
-  overflow: hidden;                    // no scroll — slots fill the space
-  padding: clamp(0.5rem, 0.8vw, 1rem) clamp(1.75rem, 3vw, 4rem);
+  overflow: hidden;
+  padding: clamp(0.5rem, 0.8vw, 2rem) clamp(1.75rem, 3vw, 8rem);
   display: flex;
   flex-direction: column;
 }
 
 .schedule-list {
-  flex: 1;                             // fill all remaining height
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: clamp(0.3rem, 0.5vw, 0.75rem);
+  gap: clamp(0.3rem, 0.5vw, 1.5rem);
   min-height: 0;
 }
 
 .slot {
-  flex: 1;                             // each slot takes equal share of height
+  flex: 1;
   display: flex;
-  align-items: center;                 // vertically centre content when expanded
-  gap: clamp(0.75rem, 1.2vw, 1.75rem);
-  padding: 0 clamp(0.9rem, 1.4vw, 2rem);
-  border-radius: clamp(8px, 0.6vw, 14px);
+  align-items: center;
+  gap: clamp(0.75rem, 1.2vw, 3.5rem);
+  padding: 0 clamp(0.9rem, 1.4vw, 4rem);
+  border-radius: clamp(8px, 0.6vw, 28px);
   background: var(--bg-card);
   border: 1px solid transparent;
   transition: background 0.2s;
@@ -454,10 +454,10 @@
 }
 
 .slot-time {
-  font-size: clamp(1.36rem, 2.21vw, 2.8rem);
+  font-size: clamp(1.36rem, 2.21vw, 5.6rem);
   font-weight: 600;
   color: var(--text-muted);
-  min-width: clamp(5rem, 7.65vw, 10.2rem);
+  min-width: clamp(5rem, 7.65vw, 20rem);
   padding-top: 0.1em;
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
@@ -467,14 +467,14 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: clamp(0.2rem, 0.35vw, 0.5rem);
+  gap: clamp(0.2rem, 0.35vw, 1rem);
   min-width: 0;
 }
 
 .slot-session {
   display: flex;
   align-items: center;
-  gap: clamp(0.4rem, 0.6vw, 0.9rem);
+  gap: clamp(0.4rem, 0.6vw, 1.8rem);
   min-width: 0;
 
   &--secondary {
@@ -485,8 +485,8 @@
 }
 
 .slot-dot {
-  width:  clamp(12px, 0.85vw, 19px);
-  height: clamp(12px, 0.85vw, 19px);
+  width:  clamp(12px, 0.85vw, 38px);
+  height: clamp(12px, 0.85vw, 38px);
   border-radius: 50%;
   flex-shrink: 0;
   background: var(--text-muted);
@@ -503,7 +503,7 @@
 }
 
 .slot-name {
-  font-size: clamp(1.45rem, 2.55vw, 3.23rem);
+  font-size: clamp(1.45rem, 2.55vw, 6.5rem);
   font-weight: 500;
   color: var(--text-primary);
   white-space: nowrap;
@@ -513,19 +513,19 @@
 }
 
 .slot-room-tag {
-  font-size: clamp(1.02rem, 1.45vw, 1.87rem);
+  font-size: clamp(1.02rem, 1.45vw, 3.74rem);
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   color: var(--text-muted);
   padding: 0.1em 0.45em;
-  border-radius: clamp(4px, 0.3vw, 7px);
+  border-radius: clamp(4px, 0.3vw, 14px);
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .slot-badge-area {
   flex-shrink: 0;
-  width: clamp(5.5rem, 8.5vw, 11rem);   // fixed width — all badges start at the same X
+  width: clamp(5.5rem, 8.5vw, 22rem);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -533,10 +533,10 @@
 
 .badge {
   flex-shrink: 0;
-  font-size: clamp(0.94rem, 1.36vw, 1.7rem);
+  font-size: clamp(0.94rem, 1.36vw, 3.4rem);
   font-weight: 700;
   letter-spacing: 0.09em;
-  padding: clamp(0.2rem, 0.3vw, 0.45rem) clamp(0.5rem, 0.8vw, 1.1rem);
+  padding: clamp(0.2rem, 0.3vw, 0.9rem) clamp(0.5rem, 0.8vw, 2.2rem);
   border-radius: 99px;
   white-space: nowrap;
   align-self: center;
@@ -558,7 +558,7 @@
 .footer {
   flex-shrink: 0;
   border-top: 1px solid var(--border-subtle);
-  padding: clamp(0.75rem, 1.2vw, 1.75rem) clamp(1.75rem, 3vw, 4rem);
+  padding: clamp(0.75rem, 1.2vw, 3.5rem) clamp(1.75rem, 3vw, 8rem);
 }
 
 .footer-qr {
@@ -575,13 +575,13 @@
 }
 
 .qr-label {
-  font-size: clamp(0.75rem, 1.2vw, 1.5rem);
+  font-size: clamp(0.75rem, 1.2vw, 3rem);
   font-weight: 600;
   color: var(--text-primary);
 }
 
 .powered-by {
-  font-size: clamp(0.6rem, 0.9vw, 1.15rem);
+  font-size: clamp(0.6rem, 0.9vw, 2.3rem);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -589,26 +589,26 @@
 }
 
 @keyframes poweredByColor {
-  0%    { color: #a855f7; }   // purple
-  16%   { color: #3b82f6; }   // blue
-  33%   { color: #6366f1; }   // indigo
-  50%   { color: #ef4444; }   // red
-  66%   { color: #ffffff; }   // white
-  83%   { color: #eab308; }   // yellow
-  100%  { color: #a855f7; }   // back to purple
+  0%    { color: #a855f7; }
+  16%   { color: #3b82f6; }
+  33%   { color: #6366f1; }
+  50%   { color: #ef4444; }
+  66%   { color: #ffffff; }
+  83%   { color: #eab308; }
+  100%  { color: #a855f7; }
 }
 
 .brand-logo-img {
-  height: clamp(32px, 3.96vw, 65px);
+  height: clamp(32px, 3.96vw, 130px);
   width: auto;
   vertical-align: middle;
 }
 
 .qr-img {
-  width:  clamp(50px, 6vw, 90px);
-  height: clamp(50px, 6vw, 90px);
+  width:  clamp(50px, 6vw, 180px);
+  height: clamp(50px, 6vw, 180px);
   flex-shrink: 0;
-  border-radius: clamp(4px, 0.4vw, 8px);
+  border-radius: clamp(4px, 0.4vw, 16px);
   background: transparent;
 }
 
