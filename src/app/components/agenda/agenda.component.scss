@@ -414,9 +414,11 @@
 
 .slot-speaker {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.05em;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 0.4em;
+  min-width: 0;
 }
 
 .slot-speaker-name {
@@ -426,7 +428,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-align: right;
 }
 
 .slot-speaker-role {
@@ -436,7 +437,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-align: right;
 }
 
 .badge {
