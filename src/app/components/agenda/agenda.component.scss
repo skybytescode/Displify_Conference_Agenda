@@ -455,12 +455,17 @@
 .powered-by {
   font-size: clamp(0.6rem, 0.9vw, 1.15rem);
   color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 
-  strong {
-    color: var(--cyan);
-    font-weight: 700;
-    letter-spacing: 0.06em;
-  }
+.brand-logo-img {
+  height: clamp(18px, 2.2vw, 36px);
+  width: auto;
+  mix-blend-mode: screen;           // removes white background on dark bg
+  filter: saturate(1.2) brightness(0.95);
+  vertical-align: middle;
 }
 
 .qr-img {

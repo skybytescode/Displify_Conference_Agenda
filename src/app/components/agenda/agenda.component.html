@@ -128,8 +128,10 @@
     <footer class="footer">
       <div class="footer-qr">
         <div class="footer-text">
-          <p class="qr-label">Scan QR for full agenda</p>
-          <p class="powered-by">Powered by <strong>DISPLIFY</strong></p>
+          <p class="powered-by">
+            Powered by
+            <img class="brand-logo-img" src="assets/displify-logo.jpeg" alt="Displify" />
+          </p>
         </div>
         @if (qrImageUrl(); as src) {
           <img class="qr-img" [src]="src" alt="QR code — scan for full agenda" />
