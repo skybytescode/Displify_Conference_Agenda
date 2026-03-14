@@ -295,49 +295,26 @@
 // ── Today's Schedule ──────────────────────────────────────────────────────────
 .section-schedule {
   flex: 1 1 0;
-  overflow-y: auto;
-  padding: 0 clamp(1.75rem, 3vw, 4rem);
-  scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
-}
-
-.schedule-header {
+  overflow: hidden;                    // no scroll — slots fill the space
+  padding: clamp(0.5rem, 0.8vw, 1rem) clamp(1.75rem, 3vw, 4rem);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: clamp(0.6rem, 0.9vw, 1.1rem) 0;
-  position: sticky;
-  top: 0;
-  background: transparent;
-  z-index: 1;
-}
-
-.schedule-title {
-  font-size: clamp(0.65rem, 1vw, 1.25rem);
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  color: var(--text-muted);
-}
-
-.schedule-date {
-  font-size: clamp(0.65rem, 1vw, 1.25rem);
-  color: var(--cyan);
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  flex-direction: column;
 }
 
 .schedule-list {
+  flex: 1;                             // fill all remaining height
   display: flex;
   flex-direction: column;
   gap: clamp(0.3rem, 0.5vw, 0.75rem);
-  padding-bottom: clamp(0.75rem, 1vw, 1.5rem);
+  min-height: 0;
 }
 
 .slot {
+  flex: 1;                             // each slot takes equal share of height
   display: flex;
-  align-items: flex-start;
+  align-items: center;                 // vertically centre content when expanded
   gap: clamp(0.75rem, 1.2vw, 1.75rem);
-  padding: clamp(0.65rem, 1vw, 1.4rem) clamp(0.9rem, 1.4vw, 2rem);
+  padding: 0 clamp(0.9rem, 1.4vw, 2rem);
   border-radius: clamp(8px, 0.6vw, 14px);
   background: var(--bg-card);
   border: 1px solid transparent;
