@@ -35,10 +35,10 @@ interface BokehTier {
 }
 
 const TIERS: BokehTier[] = [
-  { rMin: 1,   rMax: 4,   softness: 1.4, aMin: 0.50, aMax: 0.95, vMin: 60,  vMax: 160, weight: 0.38 },
-  { rMin: 8,   rMax: 30,  softness: 3.0, aMin: 0.16, aMax: 0.50, vMin: 28,  vMax: 80,  weight: 0.30 },
-  { rMin: 32,  rMax: 85,  softness: 4.0, aMin: 0.08, aMax: 0.26, vMin: 12,  vMax: 38,  weight: 0.22 },
-  { rMin: 90,  rMax: 190, softness: 5.5, aMin: 0.04, aMax: 0.14, vMin: 5,   vMax: 18,  weight: 0.10 },
+  { rMin: 1,   rMax: 4,   softness: 1.2, aMin: 0.40, aMax: 0.80, vMin: 60,  vMax: 160, weight: 0.38 },
+  { rMin: 8,   rMax: 30,  softness: 2.2, aMin: 0.12, aMax: 0.38, vMin: 28,  vMax: 80,  weight: 0.30 },
+  { rMin: 32,  rMax: 85,  softness: 3.0, aMin: 0.06, aMax: 0.20, vMin: 12,  vMax: 38,  weight: 0.22 },
+  { rMin: 90,  rMax: 190, softness: 4.0, aMin: 0.03, aMax: 0.10, vMin: 5,   vMax: 18,  weight: 0.10 },
 ];
 
 const COLORS: [number, number, number][] = [
@@ -169,6 +169,7 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
   private lastTime     = 0;
   private sceneTime    = 0;   // total elapsed seconds for ambient effects
   private resizeObs!:  ResizeObserver;
+  private canvasScale  = 1;   // scale relative to 1080p baseline — auto-updated on resize
 
   ngAfterViewInit(): void {
     const canvas  = this.canvasRef.nativeElement;
@@ -189,6 +190,8 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
     const p      = canvas.parentElement!;
     canvas.width  = p.offsetWidth;
     canvas.height = p.offsetHeight;
+    // Scale all pixel-based sizes relative to a 1920×1080 baseline
+    this.canvasScale = Math.min(canvas.width / 1920, canvas.height / 1080);
     this.initParticles();
   }
 
@@ -207,8 +210,9 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
   private spawnParticle(w: number, h: number, randomY: boolean): Particle {
     const tierIdx = this.pickTier();
     const tier    = TIERS[tierIdx];
-    const r       = tier.rMin + Math.random() * (tier.rMax - tier.rMin);
-    const vy      = tier.vMin + Math.random() * (tier.vMax - tier.vMin);
+    const s       = this.canvasScale;
+    const r       = (tier.rMin + Math.random() * (tier.rMax - tier.rMin)) * s;
+    const vy      = (tier.vMin + Math.random() * (tier.vMax - tier.vMin)) * s;
 
     const rnd = Math.random();
     const ci  = rnd < 0.72 ? Math.floor(Math.random() * 4)
@@ -233,11 +237,11 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
       r,
       softness:     tier.softness,
       vy,
-      vx:           (Math.random() - 0.5) * 4,
+      vx:           (Math.random() - 0.5) * 4 * s,
       alpha:        tier.aMin + Math.random() * (tier.aMax - tier.aMin),
       color:        COLORS[ci],
       tierIdx,
-      swayAmp:      4 + Math.random() * 22,
+      swayAmp:      (4 + Math.random() * 22) * s,
       swayFreq:     0.06 + Math.random() * 0.20,
       swayPhase:    Math.random() * Math.PI * 2,
       t:            Math.random() * 100,
@@ -256,7 +260,10 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
 
   private initParticles(): void {
     const { width: w, height: h } = this.canvasRef.nativeElement;
-    this.particles = Array.from({ length: N_PARTICLES }, () =>
+    // Scale particle count with screen area, capped at 4× baseline to avoid perf issues
+    const areaRatio = (w * h) / (1920 * 1080);
+    const count = Math.round(N_PARTICLES * Math.min(areaRatio, 4));
+    this.particles = Array.from({ length: count }, () =>
       this.spawnParticle(w, h, true)
     );
   }
@@ -340,9 +347,9 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
         // Multi-stop gradient — center bright, wide soft falloff = natural glow
         const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, drawR);
         grad.addColorStop(0.00, `rgba(${cr},${cg},${cb},${+a.toFixed(3)})`);
-        grad.addColorStop(0.15, `rgba(${cr},${cg},${cb},${+(a * 0.85).toFixed(3)})`);
-        grad.addColorStop(0.45, `rgba(${cr},${cg},${cb},${+(a * 0.40).toFixed(3)})`);
-        grad.addColorStop(0.75, `rgba(${cr},${cg},${cb},${+(a * 0.10).toFixed(3)})`);
+        grad.addColorStop(0.15, `rgba(${cr},${cg},${cb},${+(a * 0.60).toFixed(3)})`);
+        grad.addColorStop(0.45, `rgba(${cr},${cg},${cb},${+(a * 0.20).toFixed(3)})`);
+        grad.addColorStop(0.75, `rgba(${cr},${cg},${cb},${+(a * 0.04).toFixed(3)})`);
         grad.addColorStop(1.00, `rgba(${cr},${cg},${cb},0)`);
 
         ctx.fillStyle = grad;
@@ -351,8 +358,8 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
         ctx.fill();
 
         // Tier-0 dust: add a tiny bright white sparkle at peak alpha
-        if (tier === 0 && breathe > 1.20) {
-          const sa = Math.min((breathe - 1.20) * 3.0 * fadeIn, 0.95);
+        if (tier === 0 && breathe > 1.35) {
+          const sa = Math.min((breathe - 1.35) * 2.0 * fadeIn, 0.70);
           ctx.fillStyle = `rgba(255,245,210,${+sa.toFixed(3)})`;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.r * scale * 0.5, 0, Math.PI * 2);
