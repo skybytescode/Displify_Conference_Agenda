@@ -407,15 +407,32 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.1em;
+  gap: 0.3em;
   flex-shrink: 0;
   max-width: clamp(8rem, 18vw, 24rem);
 }
 
+.slot-speaker {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.05em;
+}
+
 .slot-speaker-name {
   font-size: clamp(0.75rem, 1.25vw, 1.55rem);
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+
+.slot-speaker-role {
+  font-size: clamp(0.6rem, 0.95vw, 1.2rem);
+  font-weight: 400;
+  color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

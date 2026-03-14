@@ -118,8 +118,13 @@
               @let speakers = slotSpeakers(slot.sessions);
               @if (speakers.length > 0) {
                 <div class="slot-speakers">
-                  @for (name of speakers; track name) {
-                    <span class="slot-speaker-name">{{ name }}</span>
+                  @for (sp of speakers; track sp.name) {
+                    <div class="slot-speaker">
+                      <span class="slot-speaker-name">{{ sp.name }}</span>
+                      @if (sp.affiliation) {
+                        <span class="slot-speaker-role">{{ sp.affiliation }}</span>
+                      }
+                    </div>
                   }
                 </div>
               }
