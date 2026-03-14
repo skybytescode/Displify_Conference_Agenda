@@ -39,7 +39,8 @@
 
 .content-layer {
   position: relative;
-  z-index: 1;
+  /* No z-index — avoids isolated stacking context so mix-blend-mode on child
+     elements can blend against the canvas background below */
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -62,41 +63,18 @@
   gap: 0.15rem;
 }
 
-.brand-logo {
-  display: flex;
-  align-items: baseline;
-  gap: 0.2rem;
-  line-height: 1;
-}
-
-.logo-diz {
-  font-size: clamp(2rem, 4vw, 10rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  background: linear-gradient(90deg, #a855f7, #3b82f6, #00d4ff, #22c55e, #eab308, #ef4444, #a855f7);
-  background-size: 300% 100%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: dizColor 6s ease-in-out infinite alternate;
-}
-
-@keyframes dizColor {
-  0%   { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
-}
-
-.logo-version {
-  font-size: clamp(1rem, 2vw, 5rem);
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-
-.brand-subtitle {
-  font-size: clamp(0.65rem, 1vw, 2.5rem);
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  color: var(--text-muted);
+.brand-dzi-img {
+  height: clamp(3rem, 7vw, 18rem);
+  width: auto;
+  object-fit: contain;
+  /* JPEG has no alpha — invert turns white→black, hue-rotate(180deg) shifts
+     the logo's blue-purple back from inverted yellow-green; screen blend
+     makes the black (formerly white bg) invisible on the dark app background */
+  /* invert: white→black, logo dark→light
+     contrast(20): crushes all near-black JPEG artifacts to pure black
+     screen: pure black = invisible against dark bg → clean transparent look */
+  filter: invert(1) saturate(0) contrast(20);
+  mix-blend-mode: screen;
 }
 
 .header-right {
