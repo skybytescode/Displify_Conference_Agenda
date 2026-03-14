@@ -156,6 +156,12 @@
   flex-shrink: 0;
   border-bottom: 1px solid var(--border-subtle);
   display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 1.2vw, 1.5rem);
+}
+
+.current-body {
+  display: flex;
   gap: clamp(1rem, 2vw, 3rem);
   align-items: stretch;
 }
@@ -170,19 +176,35 @@
 .current-right {
   width: 45%;
   flex-shrink: 0;
-  position: relative;       // stacking context for absolutely-positioned viewport
+  position: relative;
   border-left: 1px solid var(--border-subtle);
   padding-left: clamp(1rem, 2vw, 3rem);
-  // no overflow:hidden here — the absolute child handles clipping
-  // no natural height contribution — section height set by .current-left only
 }
 
 .credits-viewport {
-  position: absolute;       // out of normal flow — doesn't expand the section
-  inset: 0;                 // fills .current-right exactly (section height)
+  position: absolute;
+  inset: 0;
   overflow: hidden;
   mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
+}
+
+.current-progress {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 0.8vw, 1.2rem);
+
+  .progress-bar { flex: 1; margin-top: 0; }
+}
+
+.progress-pct {
+  font-size: clamp(0.8rem, 1.3vw, 1.6rem);
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+  min-width: 3em;
+  text-align: right;
 }
 
 .credits-track {
@@ -275,7 +297,6 @@
   background: var(--border-subtle);
   border-radius: 99px;
   overflow: hidden;
-  margin-top: clamp(0.75rem, 1.2vw, 1.5rem);
 }
 
 .progress-fill {

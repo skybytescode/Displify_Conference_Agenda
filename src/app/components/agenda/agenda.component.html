@@ -33,53 +33,63 @@
     <!-- ── Current Session ── -->
     @if (currentSession(); as current) {
       <section class="section-current">
-        <div class="current-left">
-          <div class="section-label label-current">
-            <span class="live-dot"></span>
-            CURRENT SESSION
-          </div>
-          <h1 class="current-title">{{ current.title }}</h1>
-          @if (current.description) {
-            <p class="current-description">{{ current.description }}</p>
-          }
-          <div class="session-meta">
-            <span class="meta-time">{{ current.startTime }} &ndash; {{ current.endTime }}</span>
-            @if (current.room) {
-              <span class="meta-separator">|</span>
-              <span class="meta-room">{{ current.room.name }}</span>
+
+        <!-- ── Two-column body: title left, credits right ── -->
+        <div class="current-body">
+          <div class="current-left">
+            <div class="section-label label-current">
+              <span class="live-dot"></span>
+              CURRENT SESSION
+            </div>
+            <h1 class="current-title">{{ current.title }}</h1>
+            @if (current.description) {
+              <p class="current-description">{{ current.description }}</p>
             }
+            <div class="session-meta">
+              <span class="meta-time">{{ current.startTime }} &ndash; {{ current.endTime }}</span>
+              @if (current.room) {
+                <span class="meta-separator">|</span>
+                <span class="meta-room">{{ current.room.name }}</span>
+              }
+            </div>
           </div>
+
+          @if (current.speakers.length > 0) {
+            <div class="current-right">
+              <div class="credits-viewport">
+                <div class="credits-track" [style.animation-duration]="creditsDuration(current.speakers)">
+                  @for (sp of current.speakers; track sp.name) {
+                    <div class="credit-item">
+                      <span class="credit-name">{{ sp.name }}</span>
+                      @if (sp.affiliation) {
+                        <span class="credit-role">{{ sp.affiliation }}</span>
+                      }
+                    </div>
+                  }
+                  @for (sp of current.speakers; track sp.name + '_2') {
+                    <div class="credit-item">
+                      <span class="credit-name">{{ sp.name }}</span>
+                      @if (sp.affiliation) {
+                        <span class="credit-role">{{ sp.affiliation }}</span>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- ── Full-width progress bar with percentage ── -->
+        <div class="current-progress">
           <div class="progress-bar">
             <div class="progress-fill"
                  [style.width.%]="current.progress"
                  [style.transition]="progressAnimate() ? (isSimulating ? 'width 60ms linear' : 'width 1s linear') : 'none'"></div>
           </div>
+          <span class="progress-pct">{{ current.progress.toFixed(0) }}%</span>
         </div>
 
-        @if (current.speakers.length > 0) {
-          <div class="current-right">
-            <div class="credits-viewport">
-              <div class="credits-track" [style.animation-duration]="creditsDuration(current.speakers)">
-                @for (sp of current.speakers; track sp.name) {
-                  <div class="credit-item">
-                    <span class="credit-name">{{ sp.name }}</span>
-                    @if (sp.affiliation) {
-                      <span class="credit-role">{{ sp.affiliation }}</span>
-                    }
-                  </div>
-                }
-                @for (sp of current.speakers; track sp.name + '_2') {
-                  <div class="credit-item">
-                    <span class="credit-name">{{ sp.name }}</span>
-                    @if (sp.affiliation) {
-                      <span class="credit-role">{{ sp.affiliation }}</span>
-                    }
-                  </div>
-                }
-              </div>
-            </div>
-          </div>
-        }
       </section>
     } @else {
       <section class="section-current">
