@@ -404,37 +404,34 @@
 }
 
 .slot-speakers {
-  display: grid;
-  grid-template-columns: auto auto;
-  column-gap: 0.5em;
-  row-gap: 0.2em;
-  align-items: baseline;
-  justify-content: end;
+  display: table;
+  border-collapse: separate;
+  border-spacing: 0 0.15em;
   flex-shrink: 0;
   max-width: clamp(8rem, 22vw, 28rem);
 }
 
 .slot-speaker {
-  display: contents; // name and role become direct grid children — columns align across speakers
+  display: table-row;
 }
 
 .slot-speaker-name {
+  display: table-cell;
   font-size: clamp(0.75rem, 1.25vw, 1.55rem);
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: right;
+  padding-right: 0.55em;
+  vertical-align: baseline;
 }
 
 .slot-speaker-role {
+  display: table-cell;
   font-size: clamp(0.6rem, 0.95vw, 1.2rem);
   font-weight: 400;
   color: var(--text-muted);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  vertical-align: baseline;
 }
 
 .badge {
