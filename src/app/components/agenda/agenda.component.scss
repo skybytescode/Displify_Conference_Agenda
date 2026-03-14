@@ -155,6 +155,64 @@
   padding: clamp(1.25rem, 2vw, 2.5rem) clamp(1.75rem, 3vw, 4rem);
   flex-shrink: 0;
   border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  gap: clamp(1rem, 2vw, 3rem);
+  align-items: stretch;
+}
+
+.current-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.current-right {
+  width: 45%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  border-left: 1px solid var(--border-subtle);
+  padding-left: clamp(1rem, 2vw, 3rem);
+}
+
+.credits-viewport {
+  width: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
+}
+
+.credits-track {
+  display: flex;
+  flex-direction: column;
+  animation: rollCredits linear infinite;
+}
+
+@keyframes rollCredits {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+.credit-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(0.35rem, 0.6vw, 0.9rem) 0;
+}
+
+.credit-name {
+  font-size: clamp(0.9rem, 1.5vw, 1.9rem);
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.credit-role {
+  font-size: clamp(0.65rem, 1.05vw, 1.35rem);
+  font-weight: 400;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
 .section-label {

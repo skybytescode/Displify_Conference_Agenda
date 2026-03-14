@@ -382,6 +382,10 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
       .toUpperCase();
   }
 
+  protected creditsDuration(speakers: { name: string }[]): string {
+    return `${Math.max(4, speakers.length * 3)}s`;
+  }
+
   protected slotStatus(sessions: EnrichedSession[]): SessionStatus {
     if (sessions.some(s => s.status === 'ongoing')) return 'ongoing';
     if (sessions.some(s => s.status === 'next'))    return 'next';
