@@ -73,10 +73,17 @@
   font-size: clamp(2rem, 4vw, 5rem);
   font-weight: 700;
   letter-spacing: -0.02em;
-  background: var(--gradient-accent);
+  background: linear-gradient(90deg, #a855f7, #3b82f6, #00d4ff, #22c55e, #eab308, #ef4444, #a855f7);
+  background-size: 300% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: dizColor 5s linear infinite;
+}
+
+@keyframes dizColor {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
 .logo-version {
