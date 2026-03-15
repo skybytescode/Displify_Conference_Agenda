@@ -421,6 +421,7 @@
   min-height: 0;
   display: flex;
   align-items: center;
+  container-type: size;
   gap: clamp(0.75rem, 1.2vw, 3.5rem);
   padding: 0 clamp(0.9rem, 1.4vw, 4rem);
   border-radius: clamp(8px, 0.6vw, 28px);
@@ -452,11 +453,10 @@
 }
 
 .slot-time {
-  font-size: clamp(1.36rem, 2.21vw, 5.6rem);
+  font-size: 22cqh;
   font-weight: 600;
   color: var(--text-muted);
-  min-width: clamp(5rem, 7.65vw, 20rem);
-  padding-top: 0.1em;
+  min-width: 6em;
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
 }
@@ -467,7 +467,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: clamp(0.6rem, 1vw, 3rem);
+  gap: 8cqh;
   min-width: 0;
 }
 
@@ -485,13 +485,12 @@
 }
 
 .slot-dot {
-  width:  clamp(16px, 1.2vw, 50px);
-  height: clamp(16px, 1.2vw, 50px);
+  width:  6cqh;
+  height: 6cqh;
   border-radius: 50%;
   flex-shrink: 0;
   background: var(--text-muted);
-  // Center dot on the first line: (lineHeight - dotSize) / 2
-  margin-top: calc(clamp(2.9rem, 5.1vw, 13rem) * 1.15 / 2 - clamp(8px, 0.6vw, 25px));
+  margin-top: 6cqh;
   animation: dotPulse 2.5s ease-in-out infinite;
 
   &.dot--keynote     { background: var(--cyan);       box-shadow: 0 0 clamp(6px, 0.6vw, 20px) var(--cyan); }
@@ -511,7 +510,7 @@
 }
 
 .slot-name {
-  font-size: clamp(2.9rem, 5.1vw, 13rem);
+  font-size: 22cqh;
   font-weight: 500;
   color: var(--text-primary);
   display: -webkit-box;
@@ -523,7 +522,7 @@
 }
 
 .slot-room-tag {
-  font-size: clamp(2rem, 3vw, 7.5rem);
+  font-size: 16cqh;
   background: linear-gradient(
     90deg,
     rgba(0, 212, 255, 0.12),
@@ -617,10 +616,10 @@
 
 .badge {
   flex-shrink: 0;
-  font-size: clamp(2.82rem, 4.08vw, 10.2rem);
+  font-size: 18cqh;
   font-weight: 700;
   letter-spacing: 0.09em;
-  padding: clamp(0.6rem, 0.9vw, 2.7rem) clamp(1.5rem, 2.4vw, 6.6rem);
+  padding: 4cqh 10cqh;
   border-radius: 99px;
   white-space: nowrap;
   align-self: center;
