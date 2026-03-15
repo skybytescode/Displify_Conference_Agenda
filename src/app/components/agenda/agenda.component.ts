@@ -20,17 +20,18 @@ import { ClockService } from '../../services/clock.service';
 import { EnrichedSession, SessionStatus, TimeSlot } from '../../models/agenda.model';
 
 // ── Bokeh particle system ────────────────────────────────────────────────────
-// Rendering: zero ctx.filter calls — softness is achieved via radial-gradient
-// falloff radius (softness multiplier).  This keeps frame rate solid at 60 fps.
+// Performance: particles are pre-rendered to offscreen sprite canvases at init.
+// Each frame only calls drawImage() with globalAlpha — zero gradient creation,
+// zero string parsing, zero arc() calls per particle.  Buttery-smooth 60 fps.
 
 interface BokehTier {
-  rMin:     number;  // core radius min px
-  rMax:     number;  // core radius max px
-  softness: number;  // actual draw radius = r * softness  (1=sharp, 5=huge bokeh)
-  aMin:     number;  // min core alpha
-  aMax:     number;  // max core alpha
-  vMin:     number;  // min upward speed px/s
-  vMax:     number;  // max upward speed px/s
+  rMin:     number;
+  rMax:     number;
+  softness: number;
+  aMin:     number;
+  aMax:     number;
+  vMin:     number;
+  vMax:     number;
   weight:   number;
 }
 
@@ -51,33 +52,36 @@ const COLORS: [number, number, number][] = [
   [165, 140, 255],  // soft purple
 ];
 
+// Sprite size per tier — drawn once, reused every frame
+const SPRITE_SIZE = [16, 64, 128, 256];
+
 interface Particle {
   x:           number;
   y:           number;
-  r:           number;   // base core radius px
-  softness:    number;   // draw radius = r * softness (cached from tier)
-  vy:          number;   // base upward speed px/s
-  vx:          number;   // horizontal drift px/s
-  alpha:       number;   // base core alpha
-  color:       [number, number, number];
+  r:           number;
+  softness:    number;
+  vy:          number;
+  vx:          number;
+  alpha:       number;
+  colorIdx:    number;
   tierIdx:     number;
   swayAmp:     number;
   swayFreq:    number;
   swayPhase:   number;
-  t:           number;   // local time s
-  age:         number;   // seconds since spawn
+  t:           number;
+  age:         number;
   fadeInDur:   number;
-  breatheAmp:  number;   // alpha oscillation amplitude
+  breatheAmp:  number;
   breatheFreq: number;
   breathePhase:number;
-  scaleAmp:    number;   // radius oscillation amplitude (fraction)
+  scaleAmp:    number;
   scaleFreq:   number;
   scalePhase:  number;
-  speedAmp:    number;   // speed oscillation amplitude (fraction)
+  speedAmp:    number;
   speedPhase:  number;
 }
 
-const N_PARTICLES = 110;
+const N_PARTICLES = 80;
 
 @Component({
   selector: 'app-agenda',
@@ -167,17 +171,36 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
   private particles:   Particle[] = [];
   private animFrameId  = 0;
   private lastTime     = 0;
-  private sceneTime    = 0;   // total elapsed seconds for ambient effects
+  private sceneTime    = 0;
   private resizeObs!:  ResizeObserver;
-  private canvasScale  = 1;   // scale relative to 1080p baseline — auto-updated on resize
+  private canvasScale  = 1;
+
+  // Pre-rendered sprite lookup: sprites[tierIdx][colorIdx] = OffscreenCanvas
+  private sprites: OffscreenCanvas[][] = [];
+  // Pre-rendered background gradient (reused every frame, rebuilt on resize)
+  private bgGrad!: CanvasGradient;
+  // Robot+cat image drawn on canvas with screen blending
+  private robotImg: HTMLImageElement | null = null;
+  // Pre-rendered feather mask for the robot image (rebuilt on resize)
+  private robotMask: OffscreenCanvas | null = null;
+  private robotMaskW = 0;
+  private robotMaskH = 0;
 
   ngAfterViewInit(): void {
     const canvas  = this.canvasRef.nativeElement;
     this.ctx      = canvas.getContext('2d')!;
+    this.buildSprites();
+    this.loadRobotImage();
     this.resizeObs = new ResizeObserver(() => this.resize());
     this.resizeObs.observe(canvas.parentElement!);
     this.resize();
     this.animFrameId = requestAnimationFrame(ts => this.loop(ts));
+  }
+
+  private loadRobotImage(): void {
+    const img = new Image();
+    img.src = 'assets/robotandcat.png';
+    img.onload = () => { this.robotImg = img; this.buildRobotMask(); };
   }
 
   ngOnDestroy(): void {
@@ -185,13 +208,91 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
     this.resizeObs?.disconnect();
   }
 
+  /** Build offscreen sprite canvases — one per tier × color. Called once. */
+  private buildSprites(): void {
+    this.sprites = TIERS.map((tier, ti) => {
+      const size = SPRITE_SIZE[ti];
+      const half = size / 2;
+      return COLORS.map(([cr, cg, cb]) => {
+        const oc  = new OffscreenCanvas(size, size);
+        const oct = oc.getContext('2d')!;
+        const grad = oct.createRadialGradient(half, half, 0, half, half, half);
+        grad.addColorStop(0.00, `rgba(${cr},${cg},${cb},1)`);
+        grad.addColorStop(0.15, `rgba(${cr},${cg},${cb},0.60)`);
+        grad.addColorStop(0.45, `rgba(${cr},${cg},${cb},0.20)`);
+        grad.addColorStop(0.75, `rgba(${cr},${cg},${cb},0.04)`);
+        grad.addColorStop(1.00, `rgba(${cr},${cg},${cb},0)`);
+        oct.fillStyle = grad;
+        oct.fillRect(0, 0, size, size);
+        return oc;
+      });
+    });
+  }
+
+  /**
+   * Pre-render the robot+cat image with feathered edges onto an OffscreenCanvas.
+   * Rebuilt on resize so it stays sharp at any resolution.
+   */
+  private buildRobotMask(): void {
+    if (!this.robotImg) return;
+    const canvas = this.canvasRef.nativeElement;
+    const ch = canvas.height;
+    // Target 65% of canvas height, maintain aspect ratio
+    const drawH = Math.round(ch * 0.65);
+    const aspect = this.robotImg.naturalWidth / this.robotImg.naturalHeight;
+    const drawW = Math.round(drawH * aspect);
+    if (drawW < 1 || drawH < 1) return;
+
+    const oc  = new OffscreenCanvas(drawW, drawH);
+    const oct = oc.getContext('2d')!;
+
+    // Draw the image
+    oct.drawImage(this.robotImg, 0, 0, drawW, drawH);
+
+    // Apply feathered edge mask using destination-in composite
+    // This multiplies existing pixels by the mask alpha
+    oct.globalCompositeOperation = 'destination-in';
+    const feather = 0.15; // 15% feather on each edge
+    const gx = oct.createLinearGradient(0, 0, drawW, 0);
+    gx.addColorStop(0,            'rgba(0,0,0,0)');
+    gx.addColorStop(feather,      'rgba(0,0,0,1)');
+    gx.addColorStop(1 - feather,  'rgba(0,0,0,1)');
+    gx.addColorStop(1,            'rgba(0,0,0,0)');
+    oct.fillStyle = gx;
+    oct.fillRect(0, 0, drawW, drawH);
+
+    const gy = oct.createLinearGradient(0, 0, 0, drawH);
+    gy.addColorStop(0,            'rgba(0,0,0,0)');
+    gy.addColorStop(feather,      'rgba(0,0,0,1)');
+    gy.addColorStop(1 - feather,  'rgba(0,0,0,1)');
+    gy.addColorStop(1,            'rgba(0,0,0,0)');
+    oct.fillStyle = gy;
+    oct.fillRect(0, 0, drawW, drawH);
+
+    oct.globalCompositeOperation = 'source-over';
+
+    this.robotMask  = oc;
+    this.robotMaskW = drawW;
+    this.robotMaskH = drawH;
+  }
+
   private resize(): void {
     const canvas = this.canvasRef.nativeElement;
     const p      = canvas.parentElement!;
     canvas.width  = p.offsetWidth;
     canvas.height = p.offsetHeight;
-    // Scale all pixel-based sizes relative to a 1920×1080 baseline
     this.canvasScale = Math.min(canvas.width / 1920, canvas.height / 1080);
+
+    // Rebuild background gradient (depends on canvas dimensions)
+    const { width: w, height: h } = canvas;
+    this.bgGrad = this.ctx.createLinearGradient(0, 0, w * 0.6, h);
+    this.bgGrad.addColorStop(0,    '#0e3f52');
+    this.bgGrad.addColorStop(0.40, '#091e31');
+    this.bgGrad.addColorStop(1,    '#040810');
+
+    // Rebuild feathered robot sprite at new resolution
+    this.buildRobotMask();
+
     this.initParticles();
   }
 
@@ -215,12 +316,11 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
     const vy      = (tier.vMin + Math.random() * (tier.vMax - tier.vMin)) * s;
 
     const rnd = Math.random();
-    const ci  = rnd < 0.42 ? Math.floor(Math.random() * 4)  // 42% warm amber/orange
-              : rnd < 0.62 ? 4                               // 20% cool blue-white
-              : rnd < 0.80 ? 5                               // 18% cyan
-              :               6;                             // 20% soft purple
+    const ci  = rnd < 0.42 ? Math.floor(Math.random() * 4)
+              : rnd < 0.62 ? 4
+              : rnd < 0.80 ? 5
+              :               6;
 
-    // Per-tier dynamic ranges
     const scaleAmps  = [0.45, 0.22, 0.14, 0.09];
     const scaleFreqs = [[2.0, 5.5], [0.5, 1.4], [0.25, 0.75], [0.12, 0.40]];
     const breathAmps = [0.45, 0.25, 0.16, 0.10];
@@ -239,7 +339,7 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
       vy,
       vx:           (Math.random() - 0.5) * 4 * s,
       alpha:        tier.aMin + Math.random() * (tier.aMax - tier.aMin),
-      color:        COLORS[ci],
+      colorIdx:     ci,
       tierIdx,
       swayAmp:      (4 + Math.random() * 22) * s,
       swayFreq:     0.06 + Math.random() * 0.20,
@@ -260,9 +360,9 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
 
   private initParticles(): void {
     const { width: w, height: h } = this.canvasRef.nativeElement;
-    // Scale particle count with screen area, capped at 4× baseline to avoid perf issues
+    // Scale count with area, cap at 2× to keep RAM low
     const areaRatio = (w * h) / (1920 * 1080);
-    const count = Math.round(N_PARTICLES * Math.min(areaRatio, 4));
+    const count = Math.round(N_PARTICLES * Math.min(areaRatio, 2));
     this.particles = Array.from({ length: count }, () =>
       this.spawnParticle(w, h, true)
     );
@@ -272,7 +372,7 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
 
   private loop(ts: number): void {
     this.animFrameId = requestAnimationFrame(t => this.loop(t));
-    const dt = Math.min((ts - this.lastTime) / 1000, 0.05);  // seconds, cap at 50ms
+    const dt = Math.min((ts - this.lastTime) / 1000, 0.05);
     this.lastTime  = ts;
     this.sceneTime += dt;
     if (dt <= 0) return;
@@ -286,16 +386,13 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
       p.t   += dt;
       p.age += dt;
 
-      // Speed modulation — particle accelerates/decelerates gently
       const currentVy = p.vy * (1 + Math.sin(p.t * 0.45 + p.speedPhase) * p.speedAmp);
       p.y -= currentVy * dt;
       p.x += p.vx * dt + Math.sin(p.t * p.swayFreq + p.swayPhase) * p.swayAmp * dt;
 
-      // Respawn at bottom when fully off the top (use max possible radius for margin)
       if (p.y + p.r * 1.5 < 0) {
         Object.assign(p, this.spawnParticle(w, h, false));
       }
-      // Horizontal wrap
       if (p.x < -p.r)    p.x = w + p.r;
       if (p.x > w + p.r) p.x = -p.r;
     }
@@ -306,15 +403,11 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
     const { width: w, height: h } = canvas;
     const ctx = this.ctx;
 
-    // ── Background — teal upper-left fading to dark navy lower-right ─────────
-    const bg = ctx.createLinearGradient(0, 0, w * 0.6, h);
-    bg.addColorStop(0,    '#0e3f52');
-    bg.addColorStop(0.40, '#091e31');
-    bg.addColorStop(1,    '#040810');
-    ctx.fillStyle = bg;
+    // ── Background — reuse pre-built gradient ────────────────────────────────
+    ctx.fillStyle = this.bgGrad;
     ctx.fillRect(0, 0, w, h);
 
-    // ── Slow ambient glow — breathes every ~12 s ─────────────────────────────
+    // ── Ambient glow — two soft radial fills ─────────────────────────────────
     const g1a = 0.07 + Math.sin(this.sceneTime * 0.18) * 0.04;
     const g2a = 0.05 + Math.cos(this.sceneTime * 0.13) * 0.03;
     const ra1 = ctx.createRadialGradient(w * 0.20, h * 0.25, 0, w * 0.20, h * 0.25, w * 0.60);
@@ -328,46 +421,37 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
     ctx.fillStyle = ra2;
     ctx.fillRect(0, 0, w, h);
 
-    // ── Particles — single pass, far-to-near, NO ctx.filter ──────────────────
-    // Softness is baked into each particle's draw radius (r * softness).
-    // A large softness value creates a wide feathered gradient = bokeh look.
-    ctx.save();
-    for (let tier = 0; tier < TIERS.length; tier++) {
-      for (const p of this.particles) {
-        if (p.tierIdx !== tier) continue;
-
-        const fadeIn  = Math.min(p.age / p.fadeInDur, 1);
-        const breathe = 1 + Math.sin(p.t * p.breatheFreq + p.breathePhase) * p.breatheAmp;
-        const a       = p.alpha * fadeIn * breathe;
-        const scale   = 1 + Math.sin(p.t * p.scaleFreq  + p.scalePhase)  * p.scaleAmp;
-        const drawR   = p.r * scale * p.softness;  // actual drawn circle radius
-
-        const [cr, cg, cb] = p.color;
-
-        // Multi-stop gradient — center bright, wide soft falloff = natural glow
-        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, drawR);
-        grad.addColorStop(0.00, `rgba(${cr},${cg},${cb},${+a.toFixed(3)})`);
-        grad.addColorStop(0.15, `rgba(${cr},${cg},${cb},${+(a * 0.60).toFixed(3)})`);
-        grad.addColorStop(0.45, `rgba(${cr},${cg},${cb},${+(a * 0.20).toFixed(3)})`);
-        grad.addColorStop(0.75, `rgba(${cr},${cg},${cb},${+(a * 0.04).toFixed(3)})`);
-        grad.addColorStop(1.00, `rgba(${cr},${cg},${cb},0)`);
-
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, drawR, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Tier-0 dust: add a tiny bright white sparkle at peak alpha
-        if (tier === 0 && breathe > 1.35) {
-          const sa = Math.min((breathe - 1.35) * 2.0 * fadeIn, 0.70);
-          ctx.fillStyle = `rgba(255,245,210,${+sa.toFixed(3)})`;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r * scale * 0.5, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
+    // ── Robot+cat image — screen-blended into the background ───────────────
+    if (this.robotMask) {
+      const rx = ((w - this.robotMaskW) / 2) | 0;
+      const ry = ((h - this.robotMaskH) / 2) | 0;
+      ctx.globalCompositeOperation = 'screen';
+      ctx.globalAlpha = 0.55;
+      ctx.drawImage(this.robotMask, rx, ry);
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = 'source-over';
     }
-    ctx.restore();
+
+    // ── Particles — drawImage from pre-rendered sprites, zero gradient work ──
+    for (const p of this.particles) {
+      const fadeIn  = Math.min(p.age / p.fadeInDur, 1);
+      const breathe = 1 + Math.sin(p.t * p.breatheFreq + p.breathePhase) * p.breatheAmp;
+      const a       = p.alpha * fadeIn * breathe;
+      if (a < 0.003) continue;
+
+      const scale  = 1 + Math.sin(p.t * p.scaleFreq + p.scalePhase) * p.scaleAmp;
+      const drawR  = p.r * scale * p.softness;
+      const size   = drawR * 2;
+
+      ctx.globalAlpha = a;
+      ctx.drawImage(
+        this.sprites[p.tierIdx][p.colorIdx],
+        (p.x - drawR) | 0,
+        (p.y - drawR) | 0,
+        size, size
+      );
+    }
+    ctx.globalAlpha = 1;
   }
 
   // ── Template helpers ────────────────────────────────────────────────────────

@@ -40,7 +40,7 @@
 .content-layer {
   position: relative;
   /* No z-index — avoids isolated stacking context so mix-blend-mode on child
-     elements can blend against the canvas background below */
+     elements (e.g. DZI logo) can blend against the canvas below */
   display: flex;
   flex-direction: column;
   height: 100%;
