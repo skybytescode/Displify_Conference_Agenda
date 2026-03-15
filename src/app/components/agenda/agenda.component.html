@@ -150,12 +150,41 @@
                 <div class="slot-session" [class.slot-session--secondary]="i > 0">
                   <span class="slot-dot" [class]="'dot--' + session.type"></span>
                   <span class="slot-name">{{ session.title }}</span>
-                  @if (slot.sessions.length > 1 && session.room) {
+                  @if (session.room) {
                     <span class="slot-room-tag">{{ session.room.shortName }}</span>
                   }
                 </div>
               }
             </div>
+
+            @if (slotSpeakers(slot.sessions); as speakers) {
+              @if (speakers.length > 0) {
+                <div class="slot-credits">
+                  <div class="slot-credits-track" [style.animation-duration]="slotCreditsDuration(speakers)">
+                    <div class="slot-credits-half">
+                      @for (sp of speakers; track $index) {
+                        <div class="slot-credit-item">
+                          <span class="slot-credit-name">{{ sp.name }}</span>
+                          @if (sp.affiliation) {
+                            <span class="slot-credit-role">{{ sp.affiliation }}</span>
+                          }
+                        </div>
+                      }
+                    </div>
+                    <div class="slot-credits-half">
+                      @for (sp of speakers; track 'b' + $index) {
+                        <div class="slot-credit-item">
+                          <span class="slot-credit-name">{{ sp.name }}</span>
+                          @if (sp.affiliation) {
+                            <span class="slot-credit-role">{{ sp.affiliation }}</span>
+                          }
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            }
 
             <div class="slot-badge-area">
               @if (slotStatus(slot.sessions) === 'ongoing') {

@@ -52,8 +52,8 @@ const COLORS: [number, number, number][] = [
   [165, 140, 255],  // soft purple
 ];
 
-// Sprite size per tier — drawn once, reused every frame
-const SPRITE_SIZE = [16, 64, 128, 256];
+// Sprite size per tier — large enough for crisp rendering even on 4K
+const SPRITE_SIZE = [64, 128, 256, 512];
 
 interface Particle {
   x:           number;
@@ -174,11 +174,17 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
   private sceneTime    = 0;
   private resizeObs!:  ResizeObserver;
   private canvasScale  = 1;
+  private dpr          = 1;   // cached devicePixelRatio
+  private cssW         = 0;   // cached CSS-pixel dimensions
+  private cssH         = 0;
 
   // Pre-rendered sprite lookup: sprites[tierIdx][colorIdx] = OffscreenCanvas
   private sprites: OffscreenCanvas[][] = [];
   // Pre-rendered background gradient (reused every frame, rebuilt on resize)
   private bgGrad!: CanvasGradient;
+  // Pre-rendered ambient glow canvases (rebuilt on resize, drawn with varying globalAlpha)
+  private glowCyan!:   OffscreenCanvas;
+  private glowPurple!: OffscreenCanvas;
   // Robot+cat image drawn on canvas with screen blending
   private robotImg: HTMLImageElement | null = null;
   // Pre-rendered feather mask for the robot image (rebuilt on resize)
@@ -189,6 +195,8 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     const canvas  = this.canvasRef.nativeElement;
     this.ctx      = canvas.getContext('2d')!;
+    this.ctx.imageSmoothingEnabled = true;
+    this.ctx.imageSmoothingQuality = 'high';
     this.buildSprites();
     this.loadRobotImage();
     this.resizeObs = new ResizeObserver(() => this.resize());
@@ -199,7 +207,7 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
 
   private loadRobotImage(): void {
     const img = new Image();
-    img.src = 'assets/robotandcat.png';
+    img.src = 'assets/Gemini_Generated_Image_wdkkh5wdkkh5wdkk (1).png';
     img.onload = () => { this.robotImg = img; this.buildRobotMask(); };
   }
 
@@ -235,10 +243,8 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
    */
   private buildRobotMask(): void {
     if (!this.robotImg) return;
-    const canvas = this.canvasRef.nativeElement;
-    const ch = canvas.height;
-    // Target 65% of canvas height, maintain aspect ratio
-    const drawH = Math.round(ch * 0.65);
+    // Build at device-pixel resolution for crispness on large screens
+    const drawH = Math.round(this.cssH * 0.65 * this.dpr);
     const aspect = this.robotImg.naturalWidth / this.robotImg.naturalHeight;
     const drawW = Math.round(drawH * aspect);
     if (drawW < 1 || drawH < 1) return;
@@ -272,23 +278,55 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
     oct.globalCompositeOperation = 'source-over';
 
     this.robotMask  = oc;
-    this.robotMaskW = drawW;
-    this.robotMaskH = drawH;
+    // Store CSS-pixel dimensions for positioning (image drawn through dpr transform)
+    this.robotMaskW = drawW / this.dpr;
+    this.robotMaskH = drawH / this.dpr;
   }
 
   private resize(): void {
     const canvas = this.canvasRef.nativeElement;
     const p      = canvas.parentElement!;
-    canvas.width  = p.offsetWidth;
-    canvas.height = p.offsetHeight;
-    this.canvasScale = Math.min(canvas.width / 1920, canvas.height / 1080);
+    this.dpr     = window.devicePixelRatio || 1;
+    this.cssW    = p.offsetWidth;
+    this.cssH    = p.offsetHeight;
 
-    // Rebuild background gradient (depends on canvas dimensions)
-    const { width: w, height: h } = canvas;
-    this.bgGrad = this.ctx.createLinearGradient(0, 0, w * 0.6, h);
+    // Set canvas buffer to native device pixels for crisp rendering
+    canvas.width  = Math.round(this.cssW * this.dpr);
+    canvas.height = Math.round(this.cssH * this.dpr);
+    canvas.style.width  = this.cssW + 'px';
+    canvas.style.height = this.cssH + 'px';
+
+    // Canvas resize resets all state — restore transform and smoothing
+    this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+    this.ctx.imageSmoothingEnabled = true;
+    this.ctx.imageSmoothingQuality = 'high';
+
+    this.canvasScale = Math.min(this.cssW / 1920, this.cssH / 1080);
+
+    // Rebuild background gradient (CSS-pixel coords, scaled by transform)
+    this.bgGrad = this.ctx.createLinearGradient(0, 0, this.cssW * 0.6, this.cssH);
     this.bgGrad.addColorStop(0,    '#0e3f52');
     this.bgGrad.addColorStop(0.40, '#091e31');
     this.bgGrad.addColorStop(1,    '#040810');
+
+    // Pre-render ambient glow canvases at native device resolution
+    const bw = canvas.width;
+    const bh = canvas.height;
+    this.glowCyan = new OffscreenCanvas(bw, bh);
+    const gc = this.glowCyan.getContext('2d')!;
+    const ra1 = gc.createRadialGradient(bw * 0.20, bh * 0.25, 0, bw * 0.20, bh * 0.25, bw * 0.60);
+    ra1.addColorStop(0, 'rgba(0,180,210,1)');
+    ra1.addColorStop(1, 'rgba(0,0,0,0)');
+    gc.fillStyle = ra1;
+    gc.fillRect(0, 0, bw, bh);
+
+    this.glowPurple = new OffscreenCanvas(bw, bh);
+    const gp = this.glowPurple.getContext('2d')!;
+    const ra2 = gp.createRadialGradient(bw * 0.80, bh * 0.75, 0, bw * 0.80, bh * 0.75, bw * 0.55);
+    ra2.addColorStop(0, 'rgba(140,100,255,1)');
+    ra2.addColorStop(1, 'rgba(0,0,0,0)');
+    gp.fillStyle = ra2;
+    gp.fillRect(0, 0, bw, bh);
 
     // Rebuild feathered robot sprite at new resolution
     this.buildRobotMask();
@@ -359,12 +397,10 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
   }
 
   private initParticles(): void {
-    const { width: w, height: h } = this.canvasRef.nativeElement;
-    // Scale count with area, cap at 2× to keep RAM low
-    const areaRatio = (w * h) / (1920 * 1080);
+    const areaRatio = (this.cssW * this.cssH) / (1920 * 1080);
     const count = Math.round(N_PARTICLES * Math.min(areaRatio, 2));
     this.particles = Array.from({ length: count }, () =>
-      this.spawnParticle(w, h, true)
+      this.spawnParticle(this.cssW, this.cssH, true)
     );
   }
 
@@ -381,7 +417,8 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
   }
 
   private update(dt: number): void {
-    const { width: w, height: h } = this.canvasRef.nativeElement;
+    const w = this.cssW;
+    const h = this.cssH;
     for (const p of this.particles) {
       p.t   += dt;
       p.age += dt;
@@ -399,35 +436,31 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
   }
 
   private draw(): void {
-    const canvas = this.canvasRef.nativeElement;
-    const { width: w, height: h } = canvas;
+    const w   = this.cssW;
+    const h   = this.cssH;
     const ctx = this.ctx;
 
-    // ── Background — reuse pre-built gradient ────────────────────────────────
+    // ── Background — reuse pre-built gradient (CSS-pixel coords via transform) ─
     ctx.fillStyle = this.bgGrad;
     ctx.fillRect(0, 0, w, h);
 
-    // ── Ambient glow — two soft radial fills ─────────────────────────────────
-    const g1a = 0.07 + Math.sin(this.sceneTime * 0.18) * 0.04;
-    const g2a = 0.05 + Math.cos(this.sceneTime * 0.13) * 0.03;
-    const ra1 = ctx.createRadialGradient(w * 0.20, h * 0.25, 0, w * 0.20, h * 0.25, w * 0.60);
-    ra1.addColorStop(0, `rgba(0,180,210,${+g1a.toFixed(3)})`);
-    ra1.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = ra1;
-    ctx.fillRect(0, 0, w, h);
-    const ra2 = ctx.createRadialGradient(w * 0.80, h * 0.75, 0, w * 0.80, h * 0.75, w * 0.55);
-    ra2.addColorStop(0, `rgba(140,100,255,${+g2a.toFixed(3)})`);
-    ra2.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = ra2;
-    ctx.fillRect(0, 0, w, h);
+    // ── Ambient glow — pre-rendered at native res, blit 1:1 to device pixels ──
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalAlpha = 0.07 + Math.sin(this.sceneTime * 0.18) * 0.04;
+    ctx.drawImage(this.glowCyan, 0, 0);
+    ctx.globalAlpha = 0.05 + Math.cos(this.sceneTime * 0.13) * 0.03;
+    ctx.drawImage(this.glowPurple, 0, 0);
+    ctx.globalAlpha = 1;
+    ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
 
-    // ── Robot+cat image — screen-blended into the background ───────────────
+    // ── Robot+cat image — screen-blended, drawn at CSS-pixel size ────────────
     if (this.robotMask) {
-      const rx = ((w - this.robotMaskW) / 2) | 0;
-      const ry = ((h - this.robotMaskH) / 2) | 0;
+      const rx = w * 0.35 - this.robotMaskW / 2;
+      const ry = (h - this.robotMaskH) / 2;
       ctx.globalCompositeOperation = 'screen';
-      ctx.globalAlpha = 0.55;
-      ctx.drawImage(this.robotMask, rx, ry);
+      ctx.globalAlpha = 0.7;
+      // Draw device-pixel bitmap scaled to CSS-pixel dimensions
+      ctx.drawImage(this.robotMask, rx, ry, this.robotMaskW, this.robotMaskH);
       ctx.globalAlpha = 1;
       ctx.globalCompositeOperation = 'source-over';
     }
@@ -446,8 +479,8 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
       ctx.globalAlpha = a;
       ctx.drawImage(
         this.sprites[p.tierIdx][p.colorIdx],
-        (p.x - drawR) | 0,
-        (p.y - drawR) | 0,
+        p.x - drawR,
+        p.y - drawR,
         size, size
       );
     }
@@ -482,6 +515,26 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
     if (sessions.some(s => s.status === 'next'))    return 'next';
     if (sessions.every(s => s.status === 'done'))   return 'done';
     return 'upcoming';
+  }
+
+  /** Duration scales with speaker count — consistent scroll speed across all slots */
+  protected slotCreditsDuration(speakers: { name: string }[]): string {
+    return `${Math.max(4, speakers.length * 2)}s`;
+  }
+
+  /** Collect unique speakers from all sessions in a slot */
+  protected slotSpeakers(sessions: EnrichedSession[]): { name: string; affiliation: string }[] {
+    const seen = new Set<string>();
+    const result: { name: string; affiliation: string }[] = [];
+    for (const s of sessions) {
+      for (const sp of s.speakers) {
+        if (!seen.has(sp.name)) {
+          seen.add(sp.name);
+          result.push(sp);
+        }
+      }
+    }
+    return result;
   }
 
   protected typeLabel(type: string): string {
