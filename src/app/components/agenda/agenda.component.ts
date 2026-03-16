@@ -207,7 +207,7 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
 
   private loadRobotImage(): void {
     const img = new Image();
-    img.src = 'assets/Gemini_Generated_Image_wdkkh5wdkkh5wdkk (1).png';
+    img.src = 'assets/robotcat8.png';
     img.onload = () => { this.robotImg = img; this.buildRobotMask(); };
   }
 
@@ -455,7 +455,7 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
 
     // ── Robot+cat image — screen-blended, drawn at CSS-pixel size ────────────
     if (this.robotMask) {
-      const rx = w * 0.35 - this.robotMaskW / 2;
+      const rx = (w - this.robotMaskW) / 2;
       const ry = (h - this.robotMaskH) / 2;
       ctx.globalCompositeOperation = 'screen';
       ctx.globalAlpha = 0.7;

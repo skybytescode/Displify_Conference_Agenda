@@ -148,11 +148,10 @@
             <div class="slot-sessions">
               @for (session of slot.sessions; track session.id; let i = $index) {
                 <div class="slot-session" [class.slot-session--secondary]="i > 0">
-                  <span class="slot-dot" [class]="'dot--' + session.type"></span>
-                  <span class="slot-name">{{ session.title }}</span>
                   @if (session.room) {
                     <span class="slot-room-tag">{{ session.room.shortName }}</span>
                   }
+                  <span class="slot-name">{{ session.title }}</span>
                 </div>
               }
             </div>

@@ -422,6 +422,7 @@
   display: flex;
   align-items: center;
   container-type: size;
+  overflow: hidden;
   gap: clamp(0.75rem, 1.2vw, 3.5rem);
   padding: 0 clamp(0.9rem, 1.4vw, 4rem);
   border-radius: clamp(8px, 0.6vw, 28px);
@@ -453,27 +454,38 @@
 }
 
 .slot-time {
-  font-size: 22cqh;
-  font-weight: 600;
-  color: var(--text-muted);
+  font-size: min(22cqh, 1.8vw);
+  font-weight: 700;
+  color: var(--text-secondary);
   min-width: 6em;
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
+  animation: timeGlow 4s ease-in-out infinite;
+}
+
+@keyframes timeGlow {
+  0%   { color: var(--text-secondary); text-shadow: none; }
+  20%  { color: var(--cyan);   text-shadow: 0 0 clamp(6px, 0.6vw, 20px) rgba(0, 212, 255, 0.3); }
+  40%  { color: var(--purple); text-shadow: 0 0 clamp(6px, 0.6vw, 20px) rgba(139, 92, 246, 0.3); }
+  60%  { color: var(--amber);  text-shadow: 0 0 clamp(6px, 0.6vw, 20px) rgba(245, 158, 11, 0.3); }
+  80%  { color: var(--green);  text-shadow: 0 0 clamp(6px, 0.6vw, 20px) rgba(34, 197, 94, 0.3); }
+  100% { color: var(--text-secondary); text-shadow: none; }
 }
 
 .slot-sessions {
-  width: 55%;
-  flex-shrink: 0;
+  flex: 1;
+  align-self: stretch;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 8cqh;
+  overflow: hidden;
+  gap: min(8cqh, 2vw);
   min-width: 0;
 }
 
 .slot-session {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: clamp(0.4rem, 0.6vw, 1.8rem);
   min-width: 0;
 
@@ -485,12 +497,12 @@
 }
 
 .slot-dot {
-  width:  6cqh;
-  height: 6cqh;
+  width:  min(6cqh, 1.5vw);
+  height: min(6cqh, 1.5vw);
   border-radius: 50%;
   flex-shrink: 0;
   background: var(--text-muted);
-  margin-top: 6cqh;
+  margin-top: min(6cqh, 1.5vw);
   animation: dotPulse 2.5s ease-in-out infinite;
 
   &.dot--keynote     { background: var(--cyan);       box-shadow: 0 0 clamp(6px, 0.6vw, 20px) var(--cyan); }
@@ -510,7 +522,7 @@
 }
 
 .slot-name {
-  font-size: 22cqh;
+  font-size: min(22cqh, 1.8vw);
   font-weight: 500;
   color: var(--text-primary);
   display: -webkit-box;
@@ -522,7 +534,7 @@
 }
 
 .slot-room-tag {
-  font-size: 16cqh;
+  font-size: min(16cqh, 1.8vw);
   background: linear-gradient(
     90deg,
     rgba(0, 212, 255, 0.12),
@@ -538,7 +550,7 @@
   flex-shrink: 0;
   white-space: nowrap;
   text-align: center;
-  min-width: clamp(6rem, 9vw, 22rem);
+  min-width: 5em;
 }
 
 @keyframes roomTagShimmer {
@@ -616,10 +628,10 @@
 
 .badge {
   flex-shrink: 0;
-  font-size: 18cqh;
+  font-size: min(18cqh, 2vw);
   font-weight: 700;
   letter-spacing: 0.09em;
-  padding: 4cqh 10cqh;
+  padding: min(4cqh, 0.8vw) min(10cqh, 2vw);
   border-radius: 99px;
   white-space: nowrap;
   align-self: center;
@@ -659,7 +671,7 @@
 .footer {
   flex-shrink: 0;
   border-top: 1px solid var(--border-subtle);
-  padding: clamp(0.75rem, 1.2vw, 3.5rem) clamp(1.75rem, 3vw, 8rem);
+  padding: clamp(2.25rem, 3.6vw, 10.5rem) clamp(1.75rem, 3vw, 8rem);
 }
 
 .footer-qr {
@@ -691,7 +703,7 @@
   /* % of logo image dimensions — scales with any screen/resolution */
   bottom: 5%;
   left: 32%;
-  font-size: clamp(0.6rem, 0.9vw, 2.3rem);
+  font-size: clamp(1.8rem, 2.7vw, 6.9rem);
   white-space: nowrap;
   animation: poweredByColor 6s linear infinite;
 }
@@ -707,15 +719,15 @@
 }
 
 .brand-logo-img {
-  height: clamp(32px, 3.96vw, 130px);
+  height: clamp(96px, 11.88vw, 390px);
   width: auto;
 }
 
 .qr-img {
-  width:  clamp(50px, 6vw, 180px);
-  height: clamp(50px, 6vw, 180px);
+  width:  clamp(150px, 18vw, 540px);
+  height: clamp(150px, 18vw, 540px);
   flex-shrink: 0;
-  border-radius: clamp(4px, 0.4vw, 16px);
+  border-radius: clamp(12px, 1.2vw, 48px);
   background: transparent;
 }
 
