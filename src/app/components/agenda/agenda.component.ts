@@ -252,11 +252,11 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
   private robotMaskH = 0;
 
   ngAfterViewInit(): void {
-    // Rotate through concurrent sessions every 8 seconds
+    // Rotate through concurrent sessions every 15 seconds
     this.rotationTimer = setInterval(() => {
       const len = this.currentSessions().length;
       if (len > 1) this.activeSessionIdx.update(i => (i + 1) % len);
-    }, 8000);
+    }, 15000);
 
     const canvas  = this.canvasRef.nativeElement;
     this.ctx      = canvas.getContext('2d')!;
