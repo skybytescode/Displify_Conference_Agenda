@@ -594,7 +594,7 @@
 }
 
 .slot-time {
-  font-size: min(22cqh, 1.8vw);
+  font-size: max(min(22cqh, 1.8vw), clamp(0.5rem, 1.4vh, 2.5rem));
   font-weight: 700;
   color: var(--text-secondary);
   min-width: 6em;
@@ -663,7 +663,7 @@
 }
 
 .slot-name {
-  font-size: min(22cqh, 1.8vw);
+  font-size: max(min(22cqh, 1.8vw), clamp(0.5rem, 1.4vh, 2.5rem));
   font-weight: 500;
   color: var(--text-primary);
   display: -webkit-box;
@@ -675,7 +675,7 @@
 }
 
 .slot-room-tag {
-  font-size: min(16cqh, 1.8vw);
+  font-size: max(min(16cqh, 1.8vw), clamp(0.45rem, 1.1vh, 2rem));
   background: linear-gradient(
     90deg,
     rgba(0, 212, 255, 0.12),
@@ -772,10 +772,10 @@
 
 .badge {
   flex-shrink: 0;
-  font-size: clamp(0.45rem, 1.4vh, 2.2rem);
+  font-size: clamp(0.6rem, 2.2vh, 4rem);
   font-weight: 700;
   letter-spacing: 0.09em;
-  padding: clamp(0.15em, 0.4vh, 0.6em) clamp(0.3em, 0.9vh, 1.4em);
+  padding: clamp(0.2em, 0.5vh, 0.8em) clamp(0.4em, 1.2vh, 2em);
   border-radius: 99px;
   white-space: nowrap;
   align-self: center;
