@@ -72,10 +72,10 @@
 }
 
 .analog-clock {
-  width:  clamp(4.5rem, 10vh, 20rem);
-  height: clamp(4.5rem, 10vh, 20rem);
+  width:  clamp(5rem, 15vh, 28rem);
+  height: clamp(5rem, 15vh, 28rem);
   flex-shrink: 0;
-  filter: drop-shadow(0 0 clamp(4px, 0.6vh, 20px) rgba(0, 212, 255, 0.35));
+  filter: drop-shadow(0 0 clamp(5px, 0.8vh, 26px) rgba(0, 212, 255, 0.35));
 }
 
 .brand-dzi-img {
