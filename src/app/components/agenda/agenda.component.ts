@@ -119,11 +119,27 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
     { initialValue: null as number | null }
   );
 
+  // ── Typewriter interval — ?typewriterSec=N (default 40) ─────────────────────
+  private typewriterInterval = toSignal(
+    this.route.queryParams.pipe(
+      map(p => p['typewriterSec'] ? Math.max(1, parseInt(p['typewriterSec'], 10)) * 1000 : 40000)
+    ),
+    { initialValue: 40000 }
+  );
+
   // ── Agenda data ────────────────────────────────────────────────────────────
-  protected agendaData     = toSignal(this.agendaService.agendaData$);
-  protected currentSession = toSignal(this.agendaService.currentSession$);
-  protected nextSession    = toSignal(this.agendaService.nextSession$);
-  protected timeSlots      = toSignal(this.agendaService.timeSlots$, { initialValue: [] as TimeSlot[] });
+  protected agendaData      = toSignal(this.agendaService.agendaData$);
+  protected currentSessions = toSignal(this.agendaService.currentSessions$, { initialValue: [] as EnrichedSession[] });
+  protected currentSession  = toSignal(this.agendaService.currentSession$);
+  protected nextSession     = toSignal(this.agendaService.nextSession$);
+  protected timeSlots       = toSignal(this.agendaService.timeSlots$, { initialValue: [] as TimeSlot[] });
+
+  // ── Rotating current session display ───────────────────────────────────────
+  protected activeSessionIdx = signal(0);
+  protected displayedSession = computed(() =>
+    this.currentSessions()[this.activeSessionIdx()] ?? null
+  );
+  private rotationTimer: ReturnType<typeof setInterval> | null = null;
 
   // ── QR code ────────────────────────────────────────────────────────────────
   protected qrImageUrl = signal<string | null>(null);
@@ -131,6 +147,12 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
   // ── Progress bar — suppress backward transition on session change ──────────
   protected progressAnimate = signal(true);
   private   trackedSessionId: string | null = null;
+
+  // ── Typewriter effect for current session description ──────────────────────
+  protected typedDescription = signal('');
+  private typewriterTimer: ReturnType<typeof setInterval> | null = null;
+  private typewriterCharTimer: ReturnType<typeof setTimeout> | null = null;
+  private lastDescription = '';
 
   constructor() {
     effect(() => {
@@ -148,13 +170,50 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
       const id = this.currentSession()?.id ?? null;
       if (id !== this.trackedSessionId) {
         this.trackedSessionId = id;
-        // Kill transition for 2 frames so the bar jumps instantly to 0
         this.progressAnimate.set(false);
         requestAnimationFrame(() =>
           requestAnimationFrame(() => this.progressAnimate.set(true))
         );
       }
     });
+
+    // Reset rotation index when the set of concurrent sessions changes
+    effect(() => {
+      this.currentSessions();
+      this.activeSessionIdx.set(0);
+    });
+
+    // Typewriter follows the displayed (rotated) session
+    effect(() => {
+      const desc = this.displayedSession()?.description ?? '';
+      if (desc !== this.lastDescription) {
+        this.lastDescription = desc;
+        this.startTypewriter(desc);
+      }
+    });
+  }
+
+  private startTypewriter(text: string): void {
+    // Clear any existing timers
+    if (this.typewriterTimer) clearInterval(this.typewriterTimer);
+    if (this.typewriterCharTimer) clearTimeout(this.typewriterCharTimer);
+
+    const typeOut = () => {
+      let i = 0;
+      this.typedDescription.set('');
+      const tick = () => {
+        if (i <= text.length) {
+          this.typedDescription.set(text.slice(0, i));
+          i++;
+          this.typewriterCharTimer = setTimeout(tick, 30);
+        }
+      };
+      tick();
+    };
+
+    // Type immediately, then repeat at configured interval
+    typeOut();
+    this.typewriterTimer = setInterval(typeOut, this.typewriterInterval());
   }
 
   protected visibleSlots = computed(() => {
@@ -193,6 +252,12 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
   private robotMaskH = 0;
 
   ngAfterViewInit(): void {
+    // Rotate through concurrent sessions every 8 seconds
+    this.rotationTimer = setInterval(() => {
+      const len = this.currentSessions().length;
+      if (len > 1) this.activeSessionIdx.update(i => (i + 1) % len);
+    }, 8000);
+
     const canvas  = this.canvasRef.nativeElement;
     this.ctx      = canvas.getContext('2d')!;
     this.ctx.imageSmoothingEnabled = true;
@@ -212,6 +277,9 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.rotationTimer) clearInterval(this.rotationTimer);
+    if (this.typewriterTimer) clearInterval(this.typewriterTimer);
+    if (this.typewriterCharTimer) clearTimeout(this.typewriterCharTimer);
     cancelAnimationFrame(this.animFrameId);
     this.resizeObs?.disconnect();
   }
@@ -489,8 +557,26 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
 
   // ── Template helpers ────────────────────────────────────────────────────────
 
-  protected formatClock(date: Date): string {
-    return date.toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
+  // Analog clock tick arrays (static, used in template @for)
+  protected readonly clockHourAngles   = Array.from({ length: 12 }, (_, i) => i * 30);
+  protected readonly clockMinuteAngles = Array.from({ length: 60 }, (_, i) => i * 6).filter(d => d % 30 !== 0);
+
+  protected hourDeg(d: Date): number {
+    return (d.getHours() % 12) * 30 + d.getMinutes() * 0.5 + d.getSeconds() / 120;
+  }
+  protected minuteDeg(d: Date): number {
+    return d.getMinutes() * 6 + d.getSeconds() * 0.1;
+  }
+  protected secondDeg(d: Date): number {
+    return d.getSeconds() * 6 + d.getMilliseconds() * 0.006;
+  }
+
+  protected formatClockHMS(date: Date): string {
+    return date.toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  }
+
+  protected formatClockMs(date: Date): string {
+    return String(date.getMilliseconds()).padStart(3, '0');
   }
 
   protected formatDisplayDate(date: Date): string {

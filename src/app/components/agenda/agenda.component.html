@@ -9,11 +9,47 @@
       <div class="brand">
         <img class="brand-dzi-img" src="assets/DZI_Logo.jpeg" alt="Digital Innovation Zone" />
       </div>
+
+      <!-- ── Analog clock ── -->
+      <svg class="analog-clock" viewBox="0 0 100 100">
+        <!-- Outer glow ring -->
+        <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(0,212,255,0.1)" stroke-width="2.5"/>
+        <!-- Face -->
+        <circle cx="50" cy="50" r="46" fill="rgba(4,8,16,0.7)" stroke="rgba(0,212,255,0.28)" stroke-width="0.7"/>
+        <!-- Hour ticks -->
+        @for (deg of clockHourAngles; track deg) {
+          <line x1="50" y1="7" x2="50" y2="17"
+                stroke="rgba(255,255,255,0.72)" stroke-width="1.8" stroke-linecap="round"
+                [attr.transform]="'rotate(' + deg + ' 50 50)'"/>
+        }
+        <!-- Minute ticks -->
+        @for (deg of clockMinuteAngles; track deg) {
+          <line x1="50" y1="9" x2="50" y2="13"
+                stroke="rgba(255,255,255,0.22)" stroke-width="0.6" stroke-linecap="round"
+                [attr.transform]="'rotate(' + deg + ' 50 50)'"/>
+        }
+        <!-- Hour hand -->
+        <line x1="50" y1="50" x2="50" y2="26"
+              stroke="white" stroke-width="3.2" stroke-linecap="round"
+              [attr.transform]="'rotate(' + hourDeg(now()) + ' 50 50)'"/>
+        <!-- Minute hand -->
+        <line x1="50" y1="52" x2="50" y2="11"
+              stroke="rgba(210,225,255,0.92)" stroke-width="2" stroke-linecap="round"
+              [attr.transform]="'rotate(' + minuteDeg(now()) + ' 50 50)'"/>
+        <!-- Second hand — with short counterbalance tail -->
+        <line x1="50" y1="62" x2="50" y2="9"
+              stroke="rgba(0,212,255,1)" stroke-width="0.9" stroke-linecap="round"
+              [attr.transform]="'rotate(' + secondDeg(now()) + ' 50 50)'"/>
+        <!-- Center hub -->
+        <circle cx="50" cy="50" r="3.2" fill="rgba(0,212,255,0.85)"/>
+        <circle cx="50" cy="50" r="1.5" fill="white"/>
+      </svg>
+
       <div class="header-right">
         @if (isSimulating) {
           <div class="sim-badge">&#9193; SIMULATION</div>
         }
-        <div class="clock">{{ formatClock(now()) }}</div>
+        <div class="clock">{{ formatClockHMS(now()) }}</div>
         <div class="date">{{ formatDisplayDate(now()) }}</div>
         @if (agendaData(); as data) {
           <div class="location">
@@ -26,8 +62,8 @@
       </div>
     </header>
 
-    <!-- ── Current Session ── -->
-    @if (currentSession(); as current) {
+    <!-- ── Current Session(s) — rotates every 8s when concurrent ── -->
+    @if (displayedSession(); as session) {
       <section class="section-current">
 
         <!-- ── Two-column body: title left, credits right ── -->
@@ -36,26 +72,36 @@
             <div class="section-label label-current">
               <span class="live-dot"></span>
               CURRENT SESSION
-            </div>
-            <h1 class="current-title">{{ current.title }}</h1>
-            @if (current.description) {
-              <p class="current-description">{{ current.description }}</p>
-            }
-            <div class="session-meta">
-              <span class="meta-time">{{ current.startTime }} &ndash; {{ current.endTime }}</span>
-              @if (current.room) {
-                <span class="meta-separator">|</span>
-                <span class="meta-room">{{ current.room.name }}</span>
+              @if (currentSessions().length > 1) {
+                <span class="session-counter">{{ activeSessionIdx() + 1 }}&nbsp;/&nbsp;{{ currentSessions().length }}</span>
               }
             </div>
+            <h1 class="current-title">{{ session.title }}</h1>
+            @if (session.description) {
+              <p class="current-description">{{ typedDescription() }}<span class="typewriter-cursor">|</span></p>
+            }
+            <div class="session-meta">
+              <span class="meta-time">{{ session.startTime }} &ndash; {{ session.endTime }}</span>
+              @if (session.room) {
+                <span class="meta-separator">|</span>
+                <span class="meta-room">{{ session.room.name }}</span>
+              }
+            </div>
+            @if (currentSessions().length > 1) {
+              <div class="session-dots">
+                @for (s of currentSessions(); track s.id; let i = $index) {
+                  <span class="session-dot" [class.session-dot--active]="i === activeSessionIdx()"></span>
+                }
+              </div>
+            }
           </div>
 
-          @if (current.speakers.length > 0) {
+          @if (session.speakers.length > 0) {
             <div class="current-right">
               <div class="credits-viewport">
-                <div class="credits-track" [style.animation-duration]="creditsDuration(current.speakers)">
+                <div class="credits-track" [style.animation-duration]="creditsDuration(session.speakers)">
                   <div class="credits-half">
-                    @for (sp of current.speakers; track sp.name) {
+                    @for (sp of session.speakers; track sp.name) {
                       <div class="credit-item">
                         <span class="credit-name">{{ sp.name }}</span>
                         @if (sp.affiliation) {
@@ -65,7 +111,7 @@
                     }
                   </div>
                   <div class="credits-half">
-                    @for (sp of current.speakers; track sp.name + '_2') {
+                    @for (sp of session.speakers; track sp.name + '_2') {
                       <div class="credit-item">
                         <span class="credit-name">{{ sp.name }}</span>
                         @if (sp.affiliation) {
@@ -80,21 +126,23 @@
           }
         </div>
 
-        <!-- ── Full-width progress bar with percentage ── -->
-        <div class="current-progress">
-          <div class="progress-bar">
-            <div class="progress-fill"
-                 [style.width.%]="current.progress"
-                 [style.transition]="progressAnimate() ? (isSimulating ? 'none' : 'width 1s linear') : 'none'"></div>
-          </div>
-          <div class="progress-pct">
-            <span class="pct-label">COMPLETE</span>
-            <div class="pct-row">
-              <span class="pct-value">{{ current.progress.toFixed(0) }}</span>
-              <span class="pct-unit">%</span>
+        <!-- ── Full-width progress bar (primary session) ── -->
+        @if (currentSession(); as current) {
+          <div class="current-progress">
+            <div class="progress-bar">
+              <div class="progress-fill"
+                   [style.width.%]="current.progress"
+                   [style.transition]="progressAnimate() ? (isSimulating ? 'none' : 'width 1s linear') : 'none'"></div>
+            </div>
+            <div class="progress-pct">
+              <span class="pct-label">COMPLETE</span>
+              <div class="pct-row">
+                <span class="pct-value">{{ current.progress.toFixed(0) }}</span>
+                <span class="pct-unit">%</span>
+              </div>
             </div>
           </div>
-        </div>
+        }
 
       </section>
     } @else {

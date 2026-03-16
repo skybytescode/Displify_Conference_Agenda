@@ -30,15 +30,19 @@ export class AgendaService {
     shareReplay(1)
   );
 
-  readonly currentSession$: Observable<EnrichedSession | null> =
+  readonly currentSessions$: Observable<EnrichedSession[]> =
     this.enrichedSessions$.pipe(
       map(sessions => {
         const ongoing = sessions.filter(s => s.status === 'ongoing');
-        return (
-          ongoing.find(s => s.roomId === 'sala-conferinta') ?? ongoing[0] ?? null
-        );
+        // Primary room first, then others
+        const primary = ongoing.find(s => s.roomId === 'sala-conferinta');
+        const rest    = ongoing.filter(s => s.roomId !== 'sala-conferinta');
+        return primary ? [primary, ...rest] : ongoing;
       })
     );
+
+  readonly currentSession$: Observable<EnrichedSession | null> =
+    this.currentSessions$.pipe(map(sessions => sessions[0] ?? null));
 
   readonly nextSession$: Observable<EnrichedSession | null> =
     this.enrichedSessions$.pipe(

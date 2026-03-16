@@ -10,8 +10,8 @@
 .session-meta {
   display: flex;
   align-items: center;
-  gap: clamp(1.2rem, 2vw, 5rem);
-  font-size: clamp(2.4rem, 3.5vw, 9rem);
+  gap: clamp(0.6rem, 1.2vh, 3.5rem);
+  font-size: clamp(2rem, 3.5vh, 9rem);
   font-weight: 600;
   animation: metaColorCycle 8s ease-in-out infinite;
 
@@ -60,7 +60,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: clamp(1.25rem, 2vw, 5rem) clamp(1.75rem, 3vw, 8rem);
+  padding: clamp(0.75rem, 1.5vh, 3.5rem) clamp(1.75rem, 3vw, 8rem);
   flex-shrink: 0;
   border-bottom: 1px solid var(--border-subtle);
 }
@@ -71,8 +71,15 @@
   gap: 0.15rem;
 }
 
+.analog-clock {
+  width:  clamp(4.5rem, 8vh, 16rem);
+  height: clamp(4.5rem, 8vh, 16rem);
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 clamp(4px, 0.5vh, 16px) rgba(0, 212, 255, 0.35));
+}
+
 .brand-dzi-img {
-  height: clamp(3rem, 7vw, 18rem);
+  height: clamp(3rem, 7.5vh, 15rem);
   width: auto;
   object-fit: contain;
   /* JPEG has no alpha — invert turns white→black, hue-rotate(180deg) shifts
@@ -94,7 +101,7 @@
 }
 
 .sim-badge {
-  font-size: clamp(0.55rem, 0.85vw, 2.1rem);
+  font-size: clamp(1.1rem, 1.7vw, 6rem);
   font-weight: 700;
   letter-spacing: 0.12em;
   color: var(--amber);
@@ -106,15 +113,22 @@
 }
 
 .clock {
-  font-size: clamp(2rem, 4vw, 10rem);
+  font-size: clamp(2rem, 4vh, 9rem);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1;
   color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.clock-ms {
+  font-size: 0.5em;
+  color: var(--cyan);
+  opacity: 0.7;
 }
 
 .date {
-  font-size: clamp(0.75rem, 1.2vw, 3rem);
+  font-size: clamp(0.9rem, 1.5vh, 3.5rem);
   font-weight: 500;
   color: var(--text-secondary);
   letter-spacing: 0.06em;
@@ -125,7 +139,7 @@
   align-items: center;
   justify-content: flex-end;
   gap: 0.35rem;
-  font-size: clamp(0.7rem, 1.1vw, 2.7rem);
+  font-size: clamp(0.85rem, 1.3vh, 3rem);
   color: var(--text-muted);
 
   .pin-icon {
@@ -138,18 +152,32 @@
 
 // ── Current Session ───────────────────────────────────────────────────────────
 .section-current {
-  padding: clamp(1.25rem, 2vw, 5rem) clamp(1.75rem, 3vw, 8rem);
+  padding: clamp(0.75rem, 1.5vh, 3.5rem) clamp(1.75rem, 3vw, 8rem);
   flex-shrink: 0;
   border-bottom: 1px solid var(--border-subtle);
   display: flex;
   flex-direction: column;
-  gap: clamp(0.75rem, 1.2vw, 3rem);
+  gap: clamp(0.5rem, 0.8vh, 2rem);
 }
 
 .current-body {
   display: flex;
   gap: clamp(1rem, 2vw, 6rem);
   align-items: stretch;
+}
+
+// Multi-session: each concurrent session gets its own column
+.current-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  gap: clamp(1rem, 2vw, 6rem);
+  align-items: stretch;
+
+  &--divided {
+    border-left: 1px solid var(--border-subtle);
+    padding-left: clamp(1rem, 2vw, 6rem);
+  }
 }
 
 .current-left {
@@ -165,6 +193,11 @@
   position: relative;
   border-left: 1px solid var(--border-subtle);
   padding-left: clamp(1rem, 2vw, 6rem);
+}
+
+// Narrower credits panel when sessions are split side-by-side
+.current-body--split .current-right {
+  width: 35%;
 }
 
 .credits-viewport {
@@ -192,15 +225,15 @@
   justify-content: center;
   background: rgba(0, 212, 255, 0.1);
   border: 1px solid rgba(0, 212, 255, 0.3);
-  border-radius: clamp(10px, 1vw, 36px);
-  padding: clamp(0.8rem, 1.4vw, 4rem) clamp(1.6rem, 2.8vw, 8rem);
-  min-width: clamp(140px, 14vw, 480px);
+  border-radius: clamp(8px, 0.7vh, 28px);
+  padding: clamp(0.7rem, 1.2vh, 3rem) clamp(1.4rem, 2.2vh, 5rem);
+  min-width: clamp(90px, 13vh, 260px);
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
 
 .pct-label {
-  font-size: clamp(0.9rem, 1.5vw, 3.8rem);
+  font-size: clamp(0.7rem, 1.2vh, 3rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--cyan);
@@ -214,14 +247,14 @@
 }
 
 .pct-value {
-  font-size: clamp(3rem, 6vw, 16rem);
+  font-size: clamp(2.5rem, 5vh, 12rem);
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.04em;
 }
 
 .pct-unit {
-  font-size: clamp(2.24rem, 3.92vw, 10rem);
+  font-size: clamp(1.8rem, 3.7vh, 9rem);
   font-weight: 700;
   color: #ffffff;
 }
@@ -249,28 +282,28 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: clamp(0.35rem, 0.6vw, 1.8rem) 0;
+  padding: 2cqh 0;
 }
 
 .credit-name {
-  font-size: clamp(0.9rem, 1.5vw, 3.8rem);
+  font-size: 20cqh;
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
 }
 
 .credit-role {
-  font-size: clamp(0.65rem, 1.05vw, 2.7rem);
+  font-size: 13cqh;
   font-weight: 400;
   color: var(--text-muted);
   white-space: nowrap;
 }
 
 .section-label {
-  font-size: clamp(1.3rem, 2vw, 5rem);
+  font-size: clamp(1.2rem, 1.8vh, 4.5rem);
   font-weight: 700;
   letter-spacing: 0.14em;
-  margin-bottom: clamp(0.5rem, 0.8vw, 2rem);
+  margin-bottom: clamp(0.3rem, 0.5vh, 1.2rem);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -279,12 +312,43 @@
 .label-current { color: var(--green); }
 .label-next    { color: var(--purple); }
 
+.session-counter {
+  margin-left: clamp(0.5rem, 1vw, 2.5rem);
+  font-size: 0.7em;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+.session-dots {
+  display: flex;
+  gap: clamp(0.3rem, 0.5vh, 1.2rem);
+  margin-top: clamp(0.3rem, 0.5vh, 1.2rem);
+}
+
+.session-dot {
+  width:  clamp(6px, 0.6vh, 18px);
+  height: clamp(6px, 0.6vh, 18px);
+  border-radius: 50%;
+  background: var(--text-muted);
+  opacity: 0.35;
+  transition: background 0.4s, opacity 0.4s, transform 0.4s;
+
+  &--active {
+    background: var(--green);
+    opacity: 1;
+    transform: scale(1.35);
+    box-shadow: 0 0 clamp(4px, 0.4vw, 18px) var(--green);
+  }
+}
+
 .live-dot {
-  width:  clamp(20px, 1.4vw, 64px);
-  height: clamp(20px, 1.4vw, 64px);
+  width:  clamp(14px, 1.6vh, 38px);
+  height: clamp(14px, 1.6vh, 38px);
   border-radius: 50%;
   background: var(--green);
-  box-shadow: 0 0 8px var(--green);
+  box-shadow: 0 0 clamp(5px, 0.5vh, 16px) var(--green);
   animation: pulse 2s ease-in-out infinite;
   flex-shrink: 0;
 
@@ -301,7 +365,7 @@
 }
 
 .current-title {
-  font-size: clamp(4rem, 7vw, 20rem);
+  font-size: clamp(3rem, 5.5vh, 14rem);
   font-weight: 700;
   line-height: 1.08;
   letter-spacing: -0.025em;
@@ -312,15 +376,37 @@
 }
 
 .current-description {
-  font-size: clamp(1.8rem, 3vw, 7.6rem);
-  color: var(--text-secondary);
+  font-size: clamp(1.5rem, 2.8vh, 7rem);
+  font-weight: 700;
   margin: 0 0 0.5em;
   line-height: 1.4;
-  max-width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  animation: descriptionColor 6s ease-in-out infinite;
+
+  .typewriter-cursor {
+    color: var(--cyan);
+    font-weight: 300;
+    animation: cursorBlink 0.7s step-end infinite;
+  }
+}
+
+@keyframes descriptionColor {
+  0%, 100% { color: var(--text-secondary); }
+  30%      { color: rgba(175, 210, 255, 0.85); }
+  60%      { color: rgba(165, 140, 255, 0.75); }
+  80%      { color: rgba(0, 210, 228, 0.8); }
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
 }
 
 .progress-bar {
-  height: clamp(10px, 0.9vw, 40px);
+  height: clamp(6px, 0.6vh, 24px);
   background: var(--border-subtle);
   border-radius: 99px;
   overflow: hidden;
@@ -335,8 +421,10 @@
 
 // ── Next Session ──────────────────────────────────────────────────────────────
 .section-next {
-  padding: clamp(1rem, 1.6vw, 4rem) clamp(1.75rem, 3vw, 8rem);
+  padding: clamp(0.6rem, 1vh, 2.5rem) clamp(1.75rem, 3vw, 8rem);
   flex-shrink: 0;
+
+  .session-meta { font-size: clamp(2rem, 3.5vh, 9rem); }
 }
 
 .next-body {
@@ -349,7 +437,7 @@
 .next-info { flex: 1; min-width: 0; }
 
 .next-title {
-  font-size: clamp(2.8rem, 5vw, 14rem);
+  font-size: clamp(1.8rem, 3.5vh, 9rem);
   font-weight: 700;
   line-height: 1.12;
   letter-spacing: -0.015em;
@@ -358,10 +446,16 @@
 }
 
 .next-subtitle {
-  font-size: clamp(1.7rem, 2.8vw, 7rem);
+  font-size: clamp(1.3rem, 2.5vh, 6rem);
   color: var(--text-secondary);
   margin: 0 0 0.4em;
   line-height: 1.35;
+}
+
+@property --fill-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
 }
 
 .countdown {
@@ -371,22 +465,60 @@
   align-items: center;
   justify-content: center;
   background: rgba(139, 92, 246, 0.15);
-  border: 1px solid rgba(139, 92, 246, 0.35);
-  border-radius: clamp(10px, 1vw, 36px);
-  padding: clamp(0.8rem, 1.4vw, 4rem) clamp(1.6rem, 2.8vw, 8rem);
-  min-width: clamp(140px, 14vw, 480px);
+  border: 1px solid transparent;
+  border-radius: clamp(8px, 0.7vh, 28px);
+  padding: clamp(0.7rem, 1.2vh, 3rem) clamp(1.4rem, 2.2vh, 5rem);
+  min-width: clamp(90px, 13vh, 260px);
   text-align: center;
+  position: relative;
+  isolation: isolate;
+
+  // Progressive golden border: fills clockwise over 60 seconds, then resets
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: inherit;
+    background: conic-gradient(
+      from 0deg,
+      rgba(245, 158, 11, 0.75)  0deg,
+      rgba(245, 158, 11, 0.90)  calc(var(--fill-angle) - 6deg),
+      rgba(255, 220, 80, 1.0)   calc(var(--fill-angle) - 2deg),
+      rgba(255, 255, 200, 1.0)  var(--fill-angle),
+      transparent               calc(var(--fill-angle) + 1deg),
+      transparent               360deg
+    );
+    animation: borderFill 60s linear infinite;
+    filter: drop-shadow(0 0 clamp(3px, 0.35vw, 9px) rgba(245, 158, 11, 0.55));
+    z-index: -1;
+  }
+
+  // Interior mask — prevents the conic gradient from bleeding through
+  // the semi-transparent background into the box content area
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: inherit;
+    background: #040810;
+    z-index: -1;
+  }
+}
+
+@keyframes borderFill {
+  from { --fill-angle: 0deg; }
+  to   { --fill-angle: 360deg; }
 }
 
 .countdown-label {
-  font-size: clamp(1rem, 1.6vw, 4rem);
+  font-size: clamp(0.7rem, 1.2vh, 3rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--purple);
 }
 
 .countdown-value {
-  font-size: clamp(3.5rem, 7vw, 18rem);
+  font-size: clamp(2.8rem, 5.5vh, 14rem);
   font-weight: 700;
   line-height: 1;
   color: var(--text-primary);
@@ -394,7 +526,7 @@
 }
 
 .countdown-unit {
-  font-size: clamp(1rem, 1.6vw, 4rem);
+  font-size: clamp(0.7rem, 1.2vh, 3rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--text-muted);
@@ -404,7 +536,7 @@
   height: 1px;
   background: var(--gradient-accent);
   opacity: 0.35;
-  margin-top: clamp(0.75rem, 1.2vw, 3rem);
+  margin-top: clamp(0.4rem, 0.7vh, 1.8rem);
 }
 
 // ── Today's Schedule ──────────────────────────────────────────────────────────
@@ -444,7 +576,7 @@
 
     .slot-dot {
       background: var(--cyan) !important;
-      box-shadow: 0 0 clamp(6px, 0.6vw, 20px) var(--cyan) !important;
+      box-shadow: 0 0 clamp(6px, 0.6vw, 32px) var(--cyan) !important;
     }
   }
 
@@ -454,7 +586,7 @@
 
     .slot-dot {
       background: var(--amber) !important;
-      box-shadow: 0 0 clamp(6px, 0.6vw, 20px) var(--amber) !important;
+      box-shadow: 0 0 clamp(6px, 0.6vw, 32px) var(--amber) !important;
     }
   }
 
@@ -473,10 +605,10 @@
 
 @keyframes timeGlow {
   0%   { color: var(--text-secondary); text-shadow: none; }
-  20%  { color: var(--cyan);   text-shadow: 0 0 clamp(6px, 0.6vw, 20px) rgba(0, 212, 255, 0.3); }
-  40%  { color: var(--purple); text-shadow: 0 0 clamp(6px, 0.6vw, 20px) rgba(139, 92, 246, 0.3); }
-  60%  { color: var(--amber);  text-shadow: 0 0 clamp(6px, 0.6vw, 20px) rgba(245, 158, 11, 0.3); }
-  80%  { color: var(--green);  text-shadow: 0 0 clamp(6px, 0.6vw, 20px) rgba(34, 197, 94, 0.3); }
+  20%  { color: var(--cyan);   text-shadow: 0 0 clamp(6px, 0.6vw, 32px) rgba(0, 212, 255, 0.3); }
+  40%  { color: var(--purple); text-shadow: 0 0 clamp(6px, 0.6vw, 32px) rgba(139, 92, 246, 0.3); }
+  60%  { color: var(--amber);  text-shadow: 0 0 clamp(6px, 0.6vw, 32px) rgba(245, 158, 11, 0.3); }
+  80%  { color: var(--green);  text-shadow: 0 0 clamp(6px, 0.6vw, 32px) rgba(34, 197, 94, 0.3); }
   100% { color: var(--text-secondary); text-shadow: none; }
 }
 
@@ -514,15 +646,15 @@
   margin-top: min(6cqh, 1.5vw);
   animation: dotPulse 2.5s ease-in-out infinite;
 
-  &.dot--keynote     { background: var(--cyan);       box-shadow: 0 0 clamp(6px, 0.6vw, 20px) var(--cyan); }
-  &.dot--panel       { background: var(--purple);     box-shadow: 0 0 clamp(6px, 0.6vw, 20px) var(--purple); }
-  &.dot--opening     { background: var(--cyan);       box-shadow: 0 0 clamp(6px, 0.6vw, 20px) var(--cyan); }
-  &.dot--talk        { background: var(--purple);     box-shadow: 0 0 clamp(6px, 0.6vw, 20px) var(--purple); }
-  &.dot--track       { background: var(--amber);      box-shadow: 0 0 clamp(6px, 0.6vw, 20px) var(--amber); }
-  &.dot--pitching    { background: var(--amber);      box-shadow: 0 0 clamp(6px, 0.6vw, 20px) var(--amber); }
+  &.dot--keynote     { background: var(--cyan);       box-shadow: 0 0 clamp(6px, 0.6vw, 32px) var(--cyan); }
+  &.dot--panel       { background: var(--purple);     box-shadow: 0 0 clamp(6px, 0.6vw, 32px) var(--purple); }
+  &.dot--opening     { background: var(--cyan);       box-shadow: 0 0 clamp(6px, 0.6vw, 32px) var(--cyan); }
+  &.dot--talk        { background: var(--purple);     box-shadow: 0 0 clamp(6px, 0.6vw, 32px) var(--purple); }
+  &.dot--track       { background: var(--amber);      box-shadow: 0 0 clamp(6px, 0.6vw, 32px) var(--amber); }
+  &.dot--pitching    { background: var(--amber);      box-shadow: 0 0 clamp(6px, 0.6vw, 32px) var(--amber); }
   &.dot--break       { background: var(--text-muted); animation: none; }
-  &.dot--networking  { background: var(--green);      box-shadow: 0 0 clamp(6px, 0.6vw, 20px) var(--green); }
-  &.dot--matchmaking { background: var(--green);      box-shadow: 0 0 clamp(6px, 0.6vw, 20px) var(--green); }
+  &.dot--networking  { background: var(--green);      box-shadow: 0 0 clamp(6px, 0.6vw, 32px) var(--green); }
+  &.dot--matchmaking { background: var(--green);      box-shadow: 0 0 clamp(6px, 0.6vw, 32px) var(--green); }
 }
 
 @keyframes dotPulse {
@@ -640,10 +772,10 @@
 
 .badge {
   flex-shrink: 0;
-  font-size: min(18cqh, 2vw);
+  font-size: clamp(0.45rem, 1.4vh, 2.2rem);
   font-weight: 700;
   letter-spacing: 0.09em;
-  padding: min(4cqh, 0.8vw) min(10cqh, 2vw);
+  padding: clamp(0.15em, 0.4vh, 0.6em) clamp(0.3em, 0.9vh, 1.4em);
   border-radius: 99px;
   white-space: nowrap;
   align-self: center;
@@ -654,7 +786,7 @@
     animation: badgeOngoingShimmer 3s ease-in-out infinite;
     color: var(--cyan);
     border: 1px solid rgba(0, 212, 255, 0.4);
-    box-shadow: 0 0 clamp(8px, 1vw, 30px) rgba(0, 212, 255, 0.15);
+    box-shadow: 0 0 clamp(8px, 1vw, 44px) rgba(0, 212, 255, 0.15);
   }
 
   &--next {
@@ -663,20 +795,20 @@
     animation: badgeNextShimmer 3s ease-in-out infinite;
     color: var(--amber);
     border: 1px solid rgba(245, 158, 11, 0.4);
-    box-shadow: 0 0 clamp(8px, 1vw, 30px) rgba(245, 158, 11, 0.15);
+    box-shadow: 0 0 clamp(8px, 1vw, 44px) rgba(245, 158, 11, 0.15);
   }
 }
 
 @keyframes badgeOngoingShimmer {
-  0%   { background-position: 100% 50%; box-shadow: 0 0 clamp(8px, 1vw, 30px) rgba(0, 212, 255, 0.15); }
-  50%  { background-position: 0% 50%;   box-shadow: 0 0 clamp(16px, 2vw, 50px) rgba(0, 212, 255, 0.3); }
-  100% { background-position: 100% 50%; box-shadow: 0 0 clamp(8px, 1vw, 30px) rgba(0, 212, 255, 0.15); }
+  0%   { background-position: 100% 50%; box-shadow: 0 0 clamp(8px, 1vw, 44px) rgba(0, 212, 255, 0.15); }
+  50%  { background-position: 0% 50%;   box-shadow: 0 0 clamp(16px, 2vw, 72px) rgba(0, 212, 255, 0.3); }
+  100% { background-position: 100% 50%; box-shadow: 0 0 clamp(8px, 1vw, 44px) rgba(0, 212, 255, 0.15); }
 }
 
 @keyframes badgeNextShimmer {
-  0%   { background-position: 100% 50%; box-shadow: 0 0 clamp(8px, 1vw, 30px) rgba(245, 158, 11, 0.15); }
-  50%  { background-position: 0% 50%;   box-shadow: 0 0 clamp(16px, 2vw, 50px) rgba(245, 158, 11, 0.3); }
-  100% { background-position: 100% 50%; box-shadow: 0 0 clamp(8px, 1vw, 30px) rgba(245, 158, 11, 0.15); }
+  0%   { background-position: 100% 50%; box-shadow: 0 0 clamp(8px, 1vw, 44px) rgba(245, 158, 11, 0.15); }
+  50%  { background-position: 0% 50%;   box-shadow: 0 0 clamp(16px, 2vw, 72px) rgba(245, 158, 11, 0.3); }
+  100% { background-position: 100% 50%; box-shadow: 0 0 clamp(8px, 1vw, 44px) rgba(245, 158, 11, 0.15); }
 }
 
 // ── Footer ────────────────────────────────────────────────────────────────────
@@ -690,7 +822,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: clamp(0.75rem, 1.5vw, 4rem);
 }
 
 .footer-text {

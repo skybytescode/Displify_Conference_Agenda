@@ -32,7 +32,7 @@
       "roomId": "sala-conferinta",
       "type": "opening",
       "title": "Deschidere oficială",
-      "description": "Mesaj de bun venit și scurtă sesiune introductivă din partea fondatorilor DIZ.",
+      "description": "Mesaj de bun venit din partea fondatorilor DIZ.",
       "speakers": [
         { "name": "Vasile Asandei",       "affiliation": "Director General, Agenția pentru Dezvoltare Regională Nord-Est" },
         { "name": "Dan Cașcaval",         "affiliation": "Prof. univ. dr. ing., Universitatea Tehnică 'Gheorghe Asachi' Iași" },
@@ -51,7 +51,7 @@
       "roomId": "sala-conferinta",
       "type": "keynote",
       "title": "Keynote: Inteligența Artificială. Perspectiva umană.",
-      "description": "AI ca motor al transformării sustenabile și orientate spre oameni. Cum tehnologiile inteligente schimbă economia, serviciile publice și viața de zi cu zi – dincolo de hype, cu impact real.",
+      "description": "AI ca motor al transformării sustenabile – dincolo de hype, cu impact real.",
       "speakers": [
         { "name": "Alexandra Avdeenko", "affiliation": "Economist, Banca Mondială" }
       ]
@@ -63,7 +63,7 @@
       "roomId": "sala-conferinta",
       "type": "panel",
       "title": "Panel 1: De la politică la practică",
-      "description": "Cum transformă inteligența artificială serviciile publice și mediul de afaceri.",
+      "description": "AI în serviciile publice și mediul de afaceri.",
       "speakers": [
         { "name": "Nelli Blinova",          "affiliation": "Responsabil Parteneriate Internaționale în domeniul IA, Ministerul Transformării Digitale Ucraina" },
         { "name": "Nicoleta Colomeeț",      "affiliation": "Director, Agenția de Guvernare Electronică Republica Moldova" },
@@ -161,7 +161,7 @@
       "roomId": "sala-atena",
       "type": "invite-only",
       "title": "Întâlnirea națională a EDIH-urilor din România",
-      "description": "Reprezentanți AM și PCIDIF. Acces doar pe bază de invitație.",
+      "description": "Acces doar pe bază de invitație.",
       "speakers": []
     },
     {
@@ -209,7 +209,7 @@
       "roomId": "sala-foyer",
       "type": "matchmaking",
       "title": "Matchmaking",
-      "description": "Sesiune programată individual prin platforma Cardneto. Susținută prin programul SustainX. Programează-ți întâlniri ltol în zona special amenajată din Sala Foyer.",
+      "description": "Întâlniri 1-la-1 prin platforma Cardneto, în Sala Foyer.",
       "speakers": []
     },
     {
