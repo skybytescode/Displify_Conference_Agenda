@@ -140,6 +140,7 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
     this.currentSessions()[this.activeSessionIdx()] ?? null
   );
   private rotationTimer: ReturnType<typeof setInterval> | null = null;
+  private lastSessionIds = '';
 
   // ── QR code ────────────────────────────────────────────────────────────────
   protected qrImageUrl = signal<string | null>(null);
@@ -177,10 +178,14 @@ export class AgendaComponent implements AfterViewInit, OnDestroy {
       }
     });
 
-    // Reset rotation index when the set of concurrent sessions changes
+    // Reset rotation index only when the set of session IDs actually changes
+    // (not on every clock tick, which would prevent rotation from ever advancing)
     effect(() => {
-      this.currentSessions();
-      this.activeSessionIdx.set(0);
+      const ids = this.currentSessions().map(s => s.id).join(',');
+      if (ids !== this.lastSessionIds) {
+        this.lastSessionIds = ids;
+        this.activeSessionIdx.set(0);
+      }
     });
 
     // Typewriter follows the displayed (rotated) session
