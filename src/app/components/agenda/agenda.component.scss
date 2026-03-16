@@ -10,8 +10,8 @@
 .session-meta {
   display: flex;
   align-items: center;
-  gap: clamp(0.6rem, 1.2vh, 3.5rem);
-  font-size: clamp(2rem, 3.5vh, 9rem);
+  gap: clamp(0.6rem, 1.5vh, 4rem);
+  font-size: clamp(2rem, 5vh, 12rem);
   font-weight: 600;
   animation: metaColorCycle 8s ease-in-out infinite;
 
@@ -60,7 +60,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: clamp(0.75rem, 1.5vh, 3.5rem) clamp(1.75rem, 3vw, 8rem);
+  padding: clamp(0.75rem, 2vh, 4rem) clamp(1.75rem, 3vw, 8rem);
   flex-shrink: 0;
   border-bottom: 1px solid var(--border-subtle);
 }
@@ -72,14 +72,14 @@
 }
 
 .analog-clock {
-  width:  clamp(4.5rem, 8vh, 16rem);
-  height: clamp(4.5rem, 8vh, 16rem);
+  width:  clamp(4.5rem, 10vh, 20rem);
+  height: clamp(4.5rem, 10vh, 20rem);
   flex-shrink: 0;
-  filter: drop-shadow(0 0 clamp(4px, 0.5vh, 16px) rgba(0, 212, 255, 0.35));
+  filter: drop-shadow(0 0 clamp(4px, 0.6vh, 20px) rgba(0, 212, 255, 0.35));
 }
 
 .brand-dzi-img {
-  height: clamp(3rem, 7.5vh, 15rem);
+  height: clamp(3rem, 9.5vh, 19rem);
   width: auto;
   object-fit: contain;
   /* JPEG has no alpha — invert turns white→black, hue-rotate(180deg) shifts
@@ -113,7 +113,7 @@
 }
 
 .clock {
-  font-size: clamp(2rem, 4vh, 9rem);
+  font-size: clamp(2rem, 5vh, 11rem);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1;
@@ -128,7 +128,7 @@
 }
 
 .date {
-  font-size: clamp(0.9rem, 1.5vh, 3.5rem);
+  font-size: clamp(0.9rem, 2vh, 4.5rem);
   font-weight: 500;
   color: var(--text-secondary);
   letter-spacing: 0.06em;
@@ -139,7 +139,7 @@
   align-items: center;
   justify-content: flex-end;
   gap: 0.35rem;
-  font-size: clamp(0.85rem, 1.3vh, 3rem);
+  font-size: clamp(0.85rem, 1.8vh, 4rem);
   color: var(--text-muted);
 
   .pin-icon {
@@ -152,12 +152,12 @@
 
 // ── Current Session ───────────────────────────────────────────────────────────
 .section-current {
-  padding: clamp(0.75rem, 1.5vh, 3.5rem) clamp(1.75rem, 3vw, 8rem);
+  padding: clamp(0.75rem, 2vh, 4rem) clamp(1.75rem, 3vw, 8rem);
   flex-shrink: 0;
   border-bottom: 1px solid var(--border-subtle);
   display: flex;
   flex-direction: column;
-  gap: clamp(0.5rem, 0.8vh, 2rem);
+  gap: clamp(0.5rem, 1vh, 2.5rem);
 }
 
 .current-body {
@@ -225,15 +225,15 @@
   justify-content: center;
   background: rgba(0, 212, 255, 0.1);
   border: 1px solid rgba(0, 212, 255, 0.3);
-  border-radius: clamp(8px, 0.7vh, 28px);
-  padding: clamp(0.7rem, 1.2vh, 3rem) clamp(1.4rem, 2.2vh, 5rem);
-  min-width: clamp(90px, 13vh, 260px);
+  border-radius: clamp(8px, 0.9vh, 36px);
+  padding: clamp(0.7rem, 1.6vh, 4rem) clamp(1.4rem, 3vh, 7rem);
+  min-width: clamp(90px, 17vh, 340px);
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
 
 .pct-label {
-  font-size: clamp(0.7rem, 1.2vh, 3rem);
+  font-size: clamp(0.7rem, 1.8vh, 4rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--cyan);
@@ -247,14 +247,14 @@
 }
 
 .pct-value {
-  font-size: clamp(2.5rem, 5vh, 12rem);
+  font-size: clamp(2.5rem, 7vh, 16rem);
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.04em;
 }
 
 .pct-unit {
-  font-size: clamp(1.8rem, 3.7vh, 9rem);
+  font-size: clamp(1.8rem, 5vh, 12rem);
   font-weight: 700;
   color: #ffffff;
 }
@@ -286,21 +286,21 @@
 }
 
 .credit-name {
-  font-size: 20cqh;
+  font-size: min(20cqh, 4.5vh);
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
 }
 
 .credit-role {
-  font-size: 13cqh;
+  font-size: min(13cqh, 2.8vh);
   font-weight: 400;
   color: var(--text-muted);
   white-space: nowrap;
 }
 
 .section-label {
-  font-size: clamp(1.2rem, 1.8vh, 4.5rem);
+  font-size: clamp(1.2rem, 2.5vh, 6rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   margin-bottom: clamp(0.3rem, 0.5vh, 1.2rem);
@@ -344,11 +344,11 @@
 }
 
 .live-dot {
-  width:  clamp(14px, 1.6vh, 38px);
-  height: clamp(14px, 1.6vh, 38px);
+  width:  clamp(14px, 2.2vh, 52px);
+  height: clamp(14px, 2.2vh, 52px);
   border-radius: 50%;
   background: var(--green);
-  box-shadow: 0 0 clamp(5px, 0.5vh, 16px) var(--green);
+  box-shadow: 0 0 clamp(5px, 0.7vh, 22px) var(--green);
   animation: pulse 2s ease-in-out infinite;
   flex-shrink: 0;
 
@@ -365,7 +365,7 @@
 }
 
 .current-title {
-  font-size: clamp(3rem, 5.5vh, 14rem);
+  font-size: clamp(3rem, 8vh, 18rem);
   font-weight: 700;
   line-height: 1.08;
   letter-spacing: -0.025em;
@@ -376,7 +376,7 @@
 }
 
 .current-description {
-  font-size: clamp(1.5rem, 2.8vh, 7rem);
+  font-size: clamp(1.5rem, 4vh, 9rem);
   font-weight: 700;
   margin: 0 0 0.5em;
   line-height: 1.4;
@@ -421,10 +421,10 @@
 
 // ── Next Session ──────────────────────────────────────────────────────────────
 .section-next {
-  padding: clamp(0.6rem, 1vh, 2.5rem) clamp(1.75rem, 3vw, 8rem);
+  padding: clamp(0.6rem, 1.5vh, 3.5rem) clamp(1.75rem, 3vw, 8rem);
   flex-shrink: 0;
 
-  .session-meta { font-size: clamp(2rem, 3.5vh, 9rem); }
+  .session-meta { font-size: clamp(2rem, 5vh, 12rem); }
 }
 
 .next-body {
@@ -437,7 +437,7 @@
 .next-info { flex: 1; min-width: 0; }
 
 .next-title {
-  font-size: clamp(1.8rem, 3.5vh, 9rem);
+  font-size: clamp(1.8rem, 5vh, 12rem);
   font-weight: 700;
   line-height: 1.12;
   letter-spacing: -0.015em;
@@ -446,7 +446,7 @@
 }
 
 .next-subtitle {
-  font-size: clamp(1.3rem, 2.5vh, 6rem);
+  font-size: clamp(1.3rem, 3.5vh, 8rem);
   color: var(--text-secondary);
   margin: 0 0 0.4em;
   line-height: 1.35;
@@ -466,9 +466,9 @@
   justify-content: center;
   background: rgba(139, 92, 246, 0.15);
   border: 1px solid transparent;
-  border-radius: clamp(8px, 0.7vh, 28px);
-  padding: clamp(0.7rem, 1.2vh, 3rem) clamp(1.4rem, 2.2vh, 5rem);
-  min-width: clamp(90px, 13vh, 260px);
+  border-radius: clamp(8px, 0.9vh, 36px);
+  padding: clamp(0.7rem, 1.6vh, 4rem) clamp(1.4rem, 3vh, 7rem);
+  min-width: clamp(90px, 17vh, 340px);
   text-align: center;
   position: relative;
   isolation: isolate;
@@ -511,14 +511,14 @@
 }
 
 .countdown-label {
-  font-size: clamp(0.7rem, 1.2vh, 3rem);
+  font-size: clamp(0.7rem, 1.8vh, 4rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--purple);
 }
 
 .countdown-value {
-  font-size: clamp(2.8rem, 5.5vh, 14rem);
+  font-size: clamp(2.8rem, 8vh, 18rem);
   font-weight: 700;
   line-height: 1;
   color: var(--text-primary);
@@ -526,7 +526,7 @@
 }
 
 .countdown-unit {
-  font-size: clamp(0.7rem, 1.2vh, 3rem);
+  font-size: clamp(0.7rem, 1.8vh, 4rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--text-muted);
@@ -772,7 +772,7 @@
 
 .badge {
   flex-shrink: 0;
-  font-size: clamp(0.6rem, 2.2vh, 4rem);
+  font-size: clamp(0.6rem, 3vh, 5.5rem);
   font-weight: 700;
   letter-spacing: 0.09em;
   padding: clamp(0.2em, 0.5vh, 0.8em) clamp(0.4em, 1.2vh, 2em);
